@@ -6,13 +6,14 @@ services:
     image: mysql:5.7.24
     logging:
       driver: none
-    ports:
-      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: vagrant
+    ports:
+      - "3307:3306"  
     volumes:
-      - foodguruapi.mysql:/var/lib/mysql
+      - phoenix_template.mysql:/var/lib/mysql
       - ./docker/config/sql:/docker-entrypoint-initdb.d
+
 
   phoenix_template:
     build:
@@ -28,6 +29,6 @@ services:
       - phoenix_template.build:/home/fc_user/phoenix_template/_build/ # Volume to persist dependency artifacts. DON'T FORGET THE TRAILING SLASH!
 
 volumes:
-  fastcomm.mysql:
+  phoenix_template.mysql:
   phoenix_template.deps:
   phoenix_template.build:
