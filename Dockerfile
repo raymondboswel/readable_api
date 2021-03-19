@@ -1,14 +1,14 @@
-# FcGuilds Elixir/Phoenix Docker Image
+# Elixir/Phoenix Docker Image
 
 # Image based on alpine linux. Smaller than full elixir variant
 # Unfortunately build tools increase image size, but are required for development.
 
 # To build run:
-#	docker build -t fastcomm/fc_guilds:dev ./
+#	docker build -t fastcomm/phoenix_template:dev ./
 
 FROM elixir:1.11.2-alpine
 # Metadata
-LABEL "maintainer"="Raymond Boswel" "appname"="FcGuilds Elixir Server"
+LABEL "maintainer"="Raymond Boswel" "appname"="Phoenix Server"
 
 # Grab dependencies
 RUN apk update && \
@@ -17,21 +17,21 @@ RUN apk update && \
 	&& rm -rf /var/cache/apk/*
 
 # Create a group and user
-RUN addgroup --gid 1000 --system fc_guilds_group && adduser --system --uid 1000 fc_guilds_user --ingroup fc_guilds_group
+RUN addgroup --gid 1000 --system fc_group && adduser --system --uid 1000 fc_user --ingroup fc_group
 
 # Setup project source code
-ENV APP_HOME /home/fc_guilds_user/fc_guilds
+ENV APP_HOME /home/fc_user/phoenix_template
 RUN mkdir $APP_HOME
 COPY ./ $APP_HOME
 
 RUN chown -R 1000:1000 $APP_HOME
 
-USER fc_guilds_user
+USER fc_user
 
 WORKDIR $APP_HOME
 
 RUN mix local.hex --force && \
-	mix archive.install hex phx_new 1.4.0 --force && \
+	mix archive.install hex phx_new 1.5.8 --force && \
 	mix local.rebar --force
 
 # Important to clean dependencies and rebuild on alpine
