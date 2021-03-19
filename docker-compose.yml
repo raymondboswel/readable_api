@@ -1,0 +1,34 @@
+# FcGuilds Development environment
+# Docker compose meant for development environment
+version: "3.8"
+services:
+  postgres.local:
+    image: postgres:12
+    logging:
+      driver: none
+    ports:
+      - "54320:5432"
+    environment:
+      POSTGRES_PASSWORD: letmein
+      POSTGRES_USER: testuser
+      POSTGRES_DB: fc_guilds_dev
+    volumes:
+      - fastcomm.postgres:/var/lib/postgresql/data
+
+  fc_guilds:
+    build:
+      context: .
+    image: fastcomm/fc_guilds:dev
+    ports:
+      - "4100:4100"
+    depends_on:
+      - postgres.local
+    volumes: # Only edit this is you know exactly what you are doing. Order matters.
+      - ./:/home/fc_guilds_user/fc_guilds # Bind volume to hot reload source code
+      - fc_guilds.deps:/home/fc_guilds_user/fc_guilds/deps/ # Volume to persist dependencies. DON'T FORGET THE TRAILING SLASH!
+      - fc_guilds.build:/home/fc_guilds_user/fc_guilds/_build/ # Volume to persist dependency artifacts. DON'T FORGET THE TRAILING SLASH!
+
+volumes:
+  fastcomm.postgres:
+  fc_guilds.deps:
+  fc_guilds.build:
