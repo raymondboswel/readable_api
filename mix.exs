@@ -35,6 +35,7 @@ defmodule PhoenixTemplate.MixProject do
     [
       {:phoenix, "~> 1.5.8"},
       {:phoenix_ecto, "~> 4.1"},
+      {:phx_gen_auth, "~> 0.6", only: [:dev], runtime: false},
       {:ecto_sql, "~> 3.4"},
       {:myxql, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},

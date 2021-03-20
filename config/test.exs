@@ -7,9 +7,9 @@ use Mix.Config
 # Run `mix help test` for more information.
 config :phoenix_template, PhoenixTemplate.Repo,
   username: "root",
-  password: "",
+  password: "vagrant",
   database: "phoenix_template_test#{System.get_env("MIX_TEST_PARTITION")}",
-  hostname: "localhost",
+  hostname: "mysql.local",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
