@@ -13,7 +13,7 @@ LABEL "maintainer"="Raymond Boswel" "appname"="Phoenix Server"
 # Grab dependencies
 RUN apk update && \
 	apk add inotify-tools libgcc libstdc++ libx11 glib libxrender libxext libintl \
-	ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family build-base \
+	ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family build-base npm \
 	&& rm -rf /var/cache/apk/*
 
 # Create a group and user

@@ -16,6 +16,19 @@ defmodule PhoenixTemplateWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/api/v1", PhoenixTemplateWeb.API.V1, as: :api_v1_open do
+    pipe_through :api
+    post "/user/authenticate", UserSessionController, :create
+    post "/user/register", UserRegistrationController, :create
+  end
+
+  scope "/api/v1", PhoenixTemplateWeb.API.V1, as: :api_v1 do
+    pipe_through [:api, :fetch_current_user, :require_authenticated_user, :put_secure_browser_headers ]
+
+    put "/user/settings", UserSettingsController, :update
+  end
+
+
   scope "/", PhoenixTemplateWeb do
     pipe_through :browser
 

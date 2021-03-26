@@ -89,8 +89,13 @@ defmodule PhoenixTemplateWeb.UserAuth do
   and remember me token.
   """
   def fetch_current_user(conn, _opts) do
-    {user_token, conn} = ensure_user_token(conn)
+    # {user_token, conn} = ensure_user_token(conn)
+    # user = user_token && Accounts.get_user_by_session_token(user_token)
+    conn = fetch_cookies(conn, signed: ~w(app-auth app-auth-local))
+    IO.inspect conn.cookies["app-auth"].token
+    user_token = conn.cookies["app-auth"].token
     user = user_token && Accounts.get_user_by_session_token(user_token)
+    IO.inspect user
     assign(conn, :current_user, user)
   end
 
