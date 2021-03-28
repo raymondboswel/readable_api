@@ -1,9 +1,9 @@
-defmodule PhoenixTemplateWeb.UserRegistrationController do
-  use PhoenixTemplateWeb, :controller
+defmodule ReadableApiWeb.UserRegistrationController do
+  use ReadableApiWeb, :controller
 
-  alias PhoenixTemplate.Accounts
-  alias PhoenixTemplate.Accounts.User
-  alias PhoenixTemplateWeb.UserAuth
+  alias ReadableApi.Accounts
+  alias ReadableApi.Accounts.User
+  alias ReadableApiWeb.UserAuth
 
   def new(conn, _params) do
     changeset = Accounts.change_user_registration(%User{})

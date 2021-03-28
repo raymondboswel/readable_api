@@ -1,8 +1,8 @@
-defmodule PhoenixTemplateWeb.UserSettingsControllerTest do
-  use PhoenixTemplateWeb.ConnCase
+defmodule ReadableApiWeb.UserSettingsControllerTest do
+  use ReadableApiWeb.ConnCase
 
-  alias PhoenixTemplate.Accounts
-  import PhoenixTemplate.AccountsFixtures
+  alias ReadableApi.Accounts
+  import ReadableApi.AccountsFixtures
 
   setup :register_and_log_in_user
 

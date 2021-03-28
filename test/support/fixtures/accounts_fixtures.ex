@@ -1,7 +1,7 @@
-defmodule PhoenixTemplate.AccountsFixtures do
+defmodule ReadableApi.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `PhoenixTemplate.Accounts` context.
+  entities via the `ReadableApi.Accounts` context.
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
@@ -14,7 +14,7 @@ defmodule PhoenixTemplate.AccountsFixtures do
         email: unique_user_email(),
         password: valid_user_password()
       })
-      |> PhoenixTemplate.Accounts.register_user()
+      |> ReadableApi.Accounts.register_user()
 
     user
   end

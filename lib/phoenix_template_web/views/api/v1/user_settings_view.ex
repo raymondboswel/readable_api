@@ -1,5 +1,5 @@
-defmodule PhoenixTemplateWeb.API.V1.UserSettingsView do
-  use PhoenixTemplateWeb, :view
+defmodule ReadableApiWeb.API.V1.UserSettingsView do
+  use ReadableApiWeb, :view
 
 
 end

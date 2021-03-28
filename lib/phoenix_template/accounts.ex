@@ -1,11 +1,11 @@
-defmodule PhoenixTemplate.Accounts do
+defmodule ReadableApi.Accounts do
   @moduledoc """
   The Accounts context.
   """
 
   import Ecto.Query, warn: false
-  alias PhoenixTemplate.Repo
-  alias PhoenixTemplate.Accounts.{User, UserToken, UserNotifier}
+  alias ReadableApi.Repo
+  alias ReadableApi.Accounts.{User, UserToken, UserNotifier}
 
   ## Database getters
 

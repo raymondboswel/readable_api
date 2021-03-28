@@ -1,7 +1,7 @@
-defmodule PhoenixTemplateWeb.UserConfirmationController do
-  use PhoenixTemplateWeb, :controller
+defmodule ReadableApiWeb.UserConfirmationController do
+  use ReadableApiWeb, :controller
 
-  alias PhoenixTemplate.Accounts
+  alias ReadableApi.Accounts
 
   def new(conn, _params) do
     render(conn, "new.html")

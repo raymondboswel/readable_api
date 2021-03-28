@@ -1,4 +1,4 @@
-defmodule PhoenixTemplate.Application do
+defmodule ReadableApi.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -8,27 +8,27 @@ defmodule PhoenixTemplate.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      PhoenixTemplate.Repo,
+      ReadableApi.Repo,
       # Start the Telemetry supervisor
-      PhoenixTemplateWeb.Telemetry,
+      ReadableApiWeb.Telemetry,
       # Start the PubSub system
-      {Phoenix.PubSub, name: PhoenixTemplate.PubSub},
+      {Phoenix.PubSub, name: ReadableApi.PubSub},
       # Start the Endpoint (http/https)
-      PhoenixTemplateWeb.Endpoint
-      # Start a worker by calling: PhoenixTemplate.Worker.start_link(arg)
-      # {PhoenixTemplate.Worker, arg}
+      ReadableApiWeb.Endpoint
+      # Start a worker by calling: ReadableApi.Worker.start_link(arg)
+      # {ReadableApi.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: PhoenixTemplate.Supervisor]
+    opts = [strategy: :one_for_one, name: ReadableApi.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    PhoenixTemplateWeb.Endpoint.config_change(changed, removed)
+    ReadableApiWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

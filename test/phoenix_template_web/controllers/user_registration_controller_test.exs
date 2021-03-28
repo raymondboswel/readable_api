@@ -1,7 +1,7 @@
-defmodule PhoenixTemplateWeb.UserRegistrationControllerTest do
-  use PhoenixTemplateWeb.ConnCase
+defmodule ReadableApiWeb.UserRegistrationControllerTest do
+  use ReadableApiWeb.ConnCase
 
-  import PhoenixTemplate.AccountsFixtures
+  import ReadableApi.AccountsFixtures
 
   describe "GET /users/register" do
     test "renders registration page", %{conn: conn} do

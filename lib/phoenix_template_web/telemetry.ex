@@ -1,4 +1,4 @@
-defmodule PhoenixTemplateWeb.Telemetry do
+defmodule ReadableApiWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
@@ -31,11 +31,11 @@ defmodule PhoenixTemplateWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("phoenix_template.repo.query.total_time", unit: {:native, :millisecond}),
-      summary("phoenix_template.repo.query.decode_time", unit: {:native, :millisecond}),
-      summary("phoenix_template.repo.query.query_time", unit: {:native, :millisecond}),
-      summary("phoenix_template.repo.query.queue_time", unit: {:native, :millisecond}),
-      summary("phoenix_template.repo.query.idle_time", unit: {:native, :millisecond}),
+      summary("readable_api.repo.query.total_time", unit: {:native, :millisecond}),
+      summary("readable_api.repo.query.decode_time", unit: {:native, :millisecond}),
+      summary("readable_api.repo.query.query_time", unit: {:native, :millisecond}),
+      summary("readable_api.repo.query.queue_time", unit: {:native, :millisecond}),
+      summary("readable_api.repo.query.idle_time", unit: {:native, :millisecond}),
 
       # VM Metrics
       summary("vm.memory.total", unit: {:byte, :kilobyte}),
@@ -49,7 +49,7 @@ defmodule PhoenixTemplateWeb.Telemetry do
     [
       # A module, function and arguments to be invoked periodically.
       # This function must call :telemetry.execute/3 and a metric must be added above.
-      # {PhoenixTemplateWeb, :count_users, []}
+      # {ReadableApiWeb, :count_users, []}
     ]
   end
 end

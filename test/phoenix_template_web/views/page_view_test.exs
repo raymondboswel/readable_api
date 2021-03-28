@@ -1,3 +1,3 @@
-defmodule PhoenixTemplateWeb.PageViewTest do
-  use PhoenixTemplateWeb.ConnCase, async: true
+defmodule ReadableApiWeb.PageViewTest do
+  use ReadableApiWeb.ConnCase, async: true
 end

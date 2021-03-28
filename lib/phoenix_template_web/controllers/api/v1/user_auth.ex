@@ -1,15 +1,15 @@
-defmodule PhoenixTemplateWeb.UserAuth do
+defmodule ReadableApiWeb.UserAuth do
   import Plug.Conn
   import Phoenix.Controller
 
-  alias PhoenixTemplate.Accounts
-  alias PhoenixTemplateWeb.Router.Helpers, as: Routes
+  alias ReadableApi.Accounts
+  alias ReadableApiWeb.Router.Helpers, as: Routes
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
   # the token expiry itself in UserToken.
   @max_age 60 * 60 * 24 * 60
-  @remember_me_cookie "_phoenix_template_web_user_remember_me"
+  @remember_me_cookie "_readable_api_web_user_remember_me"
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
 
   @doc """
@@ -75,7 +75,7 @@ defmodule PhoenixTemplateWeb.UserAuth do
     user_token && Accounts.delete_session_token(user_token)
 
     if live_socket_id = get_session(conn, :live_socket_id) do
-      PhoenixTemplateWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
+      ReadableApiWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
 
     conn

@@ -1,6 +1,6 @@
-defmodule PhoenixTemplate do
+defmodule ReadableApi do
   @moduledoc """
-  PhoenixTemplate keeps the contexts that define your domain
+  ReadableApi keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

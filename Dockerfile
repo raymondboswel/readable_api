@@ -4,7 +4,7 @@
 # Unfortunately build tools increase image size, but are required for development.
 
 # To build run:
-#	docker build -t fastcomm/phoenix_template:dev ./
+#	docker build -t fastcomm/readable_api:dev ./
 
 FROM elixir:1.11.2-alpine
 # Metadata
@@ -20,7 +20,7 @@ RUN apk update && \
 RUN addgroup --gid 1000 --system fc_group && adduser --system --uid 1000 fc_user --ingroup fc_group
 
 # Setup project source code
-ENV APP_HOME /home/fc_user/phoenix_template
+ENV APP_HOME /home/fc_user/readable_api
 RUN mkdir $APP_HOME
 COPY ./ $APP_HOME
 

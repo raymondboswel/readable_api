@@ -1,4 +1,4 @@
-defmodule PhoenixTemplateWeb.ErrorHelpers do
+defmodule ReadableApiWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -39,9 +39,9 @@ defmodule PhoenixTemplateWeb.ErrorHelpers do
     # should be written to the errors.po file. The :count option is
     # set by Ecto and indicates we should also apply plural rules.
     if count = opts[:count] do
-      Gettext.dngettext(PhoenixTemplateWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(ReadableApiWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(PhoenixTemplateWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(ReadableApiWeb.Gettext, "errors", msg, opts)
     end
   end
 end

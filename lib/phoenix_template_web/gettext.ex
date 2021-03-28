@@ -1,11 +1,11 @@
-defmodule PhoenixTemplateWeb.Gettext do
+defmodule ReadableApiWeb.Gettext do
   @moduledoc """
   A module providing Internationalization with a gettext-based API.
 
   By using [Gettext](https://hexdocs.pm/gettext),
   your module gains a set of macros for translations, for example:
 
-      import PhoenixTemplateWeb.Gettext
+      import ReadableApiWeb.Gettext
 
       # Simple translation
       gettext("Here is the string to translate")
@@ -20,5 +20,5 @@ defmodule PhoenixTemplateWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :phoenix_template
+  use Gettext, otp_app: :readable_api
 end

@@ -1,5 +1,5 @@
-defmodule PhoenixTemplateWeb.PageControllerTest do
-  use PhoenixTemplateWeb.ConnCase
+defmodule ReadableApiWeb.PageControllerTest do
+  use ReadableApiWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

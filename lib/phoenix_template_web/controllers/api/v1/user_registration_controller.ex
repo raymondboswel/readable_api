@@ -1,9 +1,9 @@
-defmodule PhoenixTemplateWeb.API.V1.UserRegistrationController do
-  use PhoenixTemplateWeb, :controller
+defmodule ReadableApiWeb.API.V1.UserRegistrationController do
+  use ReadableApiWeb, :controller
 
-  alias PhoenixTemplate.Accounts
-  alias PhoenixTemplate.Accounts.User
-  alias PhoenixTemplateWeb.UserAuth
+  alias ReadableApi.Accounts
+  alias ReadableApi.Accounts.User
+  alias ReadableApiWeb.UserAuth
 
   def create(conn, %{"user" => user_params}) do
     case Accounts.register_user(user_params) do

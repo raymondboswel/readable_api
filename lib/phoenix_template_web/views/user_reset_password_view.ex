@@ -1,3 +1,3 @@
-defmodule PhoenixTemplateWeb.UserResetPasswordView do
-  use PhoenixTemplateWeb, :view
+defmodule ReadableApiWeb.UserResetPasswordView do
+  use ReadableApiWeb, :view
 end

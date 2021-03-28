@@ -1,7 +1,7 @@
-defmodule PhoenixTemplateWeb.UserSessionControllerTest do
-  use PhoenixTemplateWeb.ConnCase
+defmodule ReadableApiWeb.UserSessionControllerTest do
+  use ReadableApiWeb.ConnCase
 
-  import PhoenixTemplate.AccountsFixtures
+  import ReadableApi.AccountsFixtures
 
   setup do
     %{user: user_fixture()}
@@ -50,7 +50,7 @@ defmodule PhoenixTemplateWeb.UserSessionControllerTest do
           }
         })
 
-      assert conn.resp_cookies["_phoenix_template_web_user_remember_me"]
+      assert conn.resp_cookies["_readable_api_web_user_remember_me"]
       assert redirected_to(conn) =~ "/"
     end
 

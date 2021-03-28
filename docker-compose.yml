@@ -11,7 +11,7 @@ services:
     ports:
       - "3307:3306"  
     volumes:
-      - phoenix_template.mysql:/var/lib/mysql
+      - readable_api.mysql:/var/lib/mysql
       - ./docker/config/sql:/docker-entrypoint-initdb.d
 
   loadbalancer:
@@ -23,23 +23,23 @@ services:
     volumes:
       - ./docker/config/nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - phoenix_template
+      - readable_api
 
 
-  phoenix_template:
+  readable_api:
     build:
       context: .
-    image: fastcomm/phoenix_template:dev
+    image: fastcomm/readable_api:dev
     ports:
       - "4100:4100"
     depends_on:
       - mysql.local
     volumes: # Only edit this is you know exactly what you are doing. Order matters.
-      - ./:/home/fc_user/phoenix_template # Bind volume to hot reload source code
-      - phoenix_template.deps:/home/fc_user/phoenix_template/deps/ # Volume to persist dependencies. DON'T FORGET THE TRAILING SLASH!
-      - phoenix_template.build:/home/fc_user/phoenix_template/_build/ # Volume to persist dependency artifacts. DON'T FORGET THE TRAILING SLASH!
+      - ./:/home/fc_user/readable_api # Bind volume to hot reload source code
+      - readable_api.deps:/home/fc_user/readable_api/deps/ # Volume to persist dependencies. DON'T FORGET THE TRAILING SLASH!
+      - readable_api.build:/home/fc_user/readable_api/_build/ # Volume to persist dependency artifacts. DON'T FORGET THE TRAILING SLASH!
 
 volumes:
-  phoenix_template.mysql:
-  phoenix_template.deps:
-  phoenix_template.build:
+  readable_api.mysql:
+  readable_api.deps:
+  readable_api.build:

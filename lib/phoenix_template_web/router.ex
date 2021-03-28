@@ -1,7 +1,7 @@
-defmodule PhoenixTemplateWeb.Router do
-  use PhoenixTemplateWeb, :router
+defmodule ReadableApiWeb.Router do
+  use ReadableApiWeb, :router
 
-  import PhoenixTemplateWeb.UserAuth
+  import ReadableApiWeb.UserAuth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -16,27 +16,27 @@ defmodule PhoenixTemplateWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api/v1", PhoenixTemplateWeb.API.V1, as: :api_v1_open do
+  scope "/api/v1", ReadableApiWeb.API.V1, as: :api_v1_open do
     pipe_through :api
     post "/user/authenticate", UserSessionController, :create
     post "/user/register", UserRegistrationController, :create
   end
 
-  scope "/api/v1", PhoenixTemplateWeb.API.V1, as: :api_v1 do
+  scope "/api/v1", ReadableApiWeb.API.V1, as: :api_v1 do
     pipe_through [:api, :fetch_current_user, :require_authenticated_user, :put_secure_browser_headers ]
 
     put "/user/settings", UserSettingsController, :update
   end
 
 
-  scope "/", PhoenixTemplateWeb do
+  scope "/", ReadableApiWeb do
     pipe_through :browser
 
     get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", PhoenixTemplateWeb do
+  # scope "/api", ReadableApiWeb do
   #   pipe_through :api
   # end
 
@@ -52,13 +52,13 @@ defmodule PhoenixTemplateWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: PhoenixTemplateWeb.Telemetry
+      live_dashboard "/dashboard", metrics: ReadableApiWeb.Telemetry
     end
   end
 
   ## Authentication routes
 
-  scope "/", PhoenixTemplateWeb do
+  scope "/", ReadableApiWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     get "/users/register", UserRegistrationController, :new
@@ -71,7 +71,7 @@ defmodule PhoenixTemplateWeb.Router do
     put "/users/reset_password/:token", UserResetPasswordController, :update
   end
 
-  scope "/", PhoenixTemplateWeb do
+  scope "/", ReadableApiWeb do
     pipe_through [:browser, :require_authenticated_user]
 
     get "/users/settings", UserSettingsController, :edit
@@ -79,7 +79,7 @@ defmodule PhoenixTemplateWeb.Router do
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
   end
 
-  scope "/", PhoenixTemplateWeb do
+  scope "/", ReadableApiWeb do
     pipe_through [:browser]
 
     delete "/users/log_out", UserSessionController, :delete

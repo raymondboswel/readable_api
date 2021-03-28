@@ -1,3 +1,3 @@
-defmodule PhoenixTemplateWeb.PageView do
-  use PhoenixTemplateWeb, :view
+defmodule ReadableApiWeb.PageView do
+  use ReadableApiWeb, :view
 end

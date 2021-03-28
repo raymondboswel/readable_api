@@ -1,4 +1,4 @@
-defmodule PhoenixTemplate.Repo.Migrations.CreateUsersAuthTables do
+defmodule ReadableApi.Repo.Migrations.CreateUsersAuthTables do
   use Ecto.Migration
 
   def change do

@@ -1,8 +1,8 @@
-defmodule PhoenixTemplateWeb.UserSessionController do
-  use PhoenixTemplateWeb, :controller
+defmodule ReadableApiWeb.UserSessionController do
+  use ReadableApiWeb, :controller
 
-  alias PhoenixTemplate.Accounts
-  alias PhoenixTemplateWeb.UserAuth
+  alias ReadableApi.Accounts
+  alias ReadableApiWeb.UserAuth
 
   def new(conn, _params) do
     render(conn, "new.html", error_message: nil)

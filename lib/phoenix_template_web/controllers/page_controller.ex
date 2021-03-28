@@ -1,5 +1,5 @@
-defmodule PhoenixTemplateWeb.PageController do
-  use PhoenixTemplateWeb, :controller
+defmodule ReadableApiWeb.PageController do
+  use ReadableApiWeb, :controller
 
   def index(conn, _params) do
     render(conn, "index.html")

@@ -8,21 +8,21 @@ In order to get up and running in as little time as possible, the project makes 
 
 1. Download and install docker and docker-compose for you specific operating system by following the instructions posted [here](https://docs.docker.com/get-docker/)
 
-2. Run `docker-compose run phoenix_template mix ecto.setup` to setup your database.
+2. Run `docker-compose run readable_api mix ecto.setup` to setup your database.
 
 3. Run `docker-compose up` to start working.
 
-4. // Ask a developer on the project to share their dev.secret.exs and copy it to `phoenix_template/config/dev.secret.exs`.
+4. // Ask a developer on the project to share their dev.secret.exs and copy it to `readable_api/config/dev.secret.exs`.
 
 ### Development tasks
 
-  * Install dependencies with `docker-compose run phoenix_template mix deps.get`
-  * Reset you database with `docker-compose run phoenix_template mix ecto.reset`
-  * Access the iex console `docker-compose run phoenix_template iex`
-  * Migrate new migrations `docker-compose run phoenix_template mix ecto.migrate`
-  * Check migrations status `docker-compose run phoenix_template mix ecto.migrations`
-  * Rollback a migration `docker-compose run phoenix_template mix ecto.rollback`
-  * Run tests `docker-compose run -e DOC=1 phoenix_template mix test --only fixed_tests`
+  * Install dependencies with `docker-compose run readable_api mix deps.get`
+  * Reset you database with `docker-compose run readable_api mix ecto.reset`
+  * Access the iex console `docker-compose run readable_api iex`
+  * Migrate new migrations `docker-compose run readable_api mix ecto.migrate`
+  * Check migrations status `docker-compose run readable_api mix ecto.migrations`
+  * Rollback a migration `docker-compose run readable_api mix ecto.rollback`
+  * Run tests `docker-compose run -e DOC=1 readable_api mix test --only fixed_tests`
 
   * After tests have been executed, html api docs can updated with
   ```cd assets && yarn run generate:docs```
@@ -67,23 +67,23 @@ You should now be ready to go as soon as the install finishes.
 
 To  view the latest logs interactively use:
 ```
-tail -f /var/log/phoenix_template/error.log
+tail -f /var/log/readable_api/error.log
 ```
 To remotely connect to IEX, first cd into the current directory, then use:
 ```
-bin/phoenix_template remote
+bin/readable_api remote
 ```
 To view the migration history, first cd into the current directory then use:
 ```
-bin/phoenix_template rpc "Release.Migrate.migrations"
+bin/readable_api rpc "Release.Migrate.migrations"
 ```
 To run all migrations, first cd into the current directory then use:
 ```
-bin/phoenix_template rpc "Release.Migrate.migrate"
+bin/readable_api rpc "Release.Migrate.migrate"
 ```
 To rollback migrations, first cd into the current directory then use:
 ```
-bin/phoenix_template rpc "Release.Migrate.rollback"
+bin/readable_api rpc "Release.Migrate.rollback"
 ```
 
 
@@ -115,9 +115,9 @@ Let NetworkManager manage `/etc/resolv.conf`:
 ```
 sudo rm /etc/resolv.conf ; sudo ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
 ```
-Configure phoenix_template.local
+Configure readable_api.local
 ```
-echo 'address=/.phoenix_template.local/127.0.0.1' | sudo tee /etc/NetworkManager/dnsmasq.d/phoenix_template.local-wildcard.conf
+echo 'address=/.readable_api.local/127.0.0.1' | sudo tee /etc/NetworkManager/dnsmasq.d/readable_api.local-wildcard.conf
 ```
 NetworkManager should be reloaded for the changes to take effect.
 ```
@@ -131,14 +131,14 @@ dig askubuntu.com +short
 151.101.1.69
 151.101.193.69
 ```
-And lastly verify that the phoenix_template.local and subdomains are resolved as 127.0.0.1:
+And lastly verify that the readable_api.local and subdomains are resolved as 127.0.0.1:
 ```
-dig phoenix_template.local  +short
+dig readable_api.local  +short
 127.0.0.1
 127.0.0.1
 127.0.0.1
 ```
-Depending on your OS you might need to add an entry for `phoenix_template.local` in your `/etc/hosts` file pointing to `127.0.0.1` as well.
+Depending on your OS you might need to add an entry for `readable_api.local` in your `/etc/hosts` file pointing to `127.0.0.1` as well.
 Ensure the Nginx block is uncommented in the `docker-compose.yml` file, and ensure all required services are uncommented as well.
 ## Different configurations
 By default, primary will run all migrations and seeds, which means secondary should connect first the majority of the time.
@@ -149,7 +149,7 @@ docker-compose run foodguru.secondary iex --name foodguru@foodguru.secondary --c
 From the console you can access the processes and kill and restart as you wish. You can also stop primary and restart it in a similar manner.
 
 
-# PhoenixTemplate
+# ReadableApi
 
 To start your Phoenix server:
 

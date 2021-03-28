@@ -1,5 +1,5 @@
-defmodule PhoenixTemplateWeb.API.V1.UserSessionView do
-  use PhoenixTemplateWeb, :view
+defmodule ReadableApiWeb.API.V1.UserSessionView do
+  use ReadableApiWeb, :view
 
   def render("token.json", %{token:  token}) do
     %{data: %{

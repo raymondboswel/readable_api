@@ -1,3 +1,3 @@
-defmodule PhoenixTemplateWeb.UserConfirmationView do
-  use PhoenixTemplateWeb, :view
+defmodule ReadableApiWeb.UserConfirmationView do
+  use ReadableApiWeb, :view
 end

@@ -1,5 +1,5 @@
-defmodule PhoenixTemplateWeb.ErrorView do
-  use PhoenixTemplateWeb, :view
+defmodule ReadableApiWeb.ErrorView do
+  use ReadableApiWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

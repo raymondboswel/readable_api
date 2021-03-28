@@ -1,16 +1,16 @@
-defmodule PhoenixTemplateWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :phoenix_template
+defmodule ReadableApiWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :readable_api
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_phoenix_template_key",
+    key: "_readable_api_key",
     signing_salt: "jFMXG0B8"
   ]
 
-  socket "/socket", PhoenixTemplateWeb.UserSocket,
+  socket "/socket", ReadableApiWeb.UserSocket,
     websocket: true,
     longpoll: false
 
@@ -22,9 +22,9 @@ defmodule PhoenixTemplateWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :phoenix_template,
+    from: :readable_api,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js app.html _app favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -32,7 +32,7 @@ defmodule PhoenixTemplateWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :phoenix_template
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :readable_api
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,
@@ -50,5 +50,5 @@ defmodule PhoenixTemplateWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug PhoenixTemplateWeb.Router
+  plug ReadableApiWeb.Router
 end

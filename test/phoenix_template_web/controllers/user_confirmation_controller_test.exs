@@ -1,9 +1,9 @@
-defmodule PhoenixTemplateWeb.UserConfirmationControllerTest do
-  use PhoenixTemplateWeb.ConnCase
+defmodule ReadableApiWeb.UserConfirmationControllerTest do
+  use ReadableApiWeb.ConnCase
 
-  alias PhoenixTemplate.Accounts
-  alias PhoenixTemplate.Repo
-  import PhoenixTemplate.AccountsFixtures
+  alias ReadableApi.Accounts
+  alias ReadableApi.Repo
+  import ReadableApi.AccountsFixtures
 
   setup do
     %{user: user_fixture()}

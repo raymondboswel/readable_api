@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :phoenix_template,
-  ecto_repos: [PhoenixTemplate.Repo]
+config :readable_api,
+  ecto_repos: [ReadableApi.Repo]
 
 # Configures the endpoint
-config :phoenix_template, PhoenixTemplateWeb.Endpoint,
+config :readable_api, ReadableApiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "CToiSDKNFkw98KMsAIdroCOgGodsytQVoOnmrqjmE+ArhPaDDYsaXANul2wbrLEG",
-  render_errors: [view: PhoenixTemplateWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: PhoenixTemplate.PubSub,
+  render_errors: [view: ReadableApiWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: ReadableApi.PubSub,
   live_view: [signing_salt: "XLHFZyL2"]
 
 # Configures Elixir's Logger

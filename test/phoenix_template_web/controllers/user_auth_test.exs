@@ -1,16 +1,16 @@
-defmodule PhoenixTemplateWeb.UserAuthTest do
-  use PhoenixTemplateWeb.ConnCase
+defmodule ReadableApiWeb.UserAuthTest do
+  use ReadableApiWeb.ConnCase
 
-  alias PhoenixTemplate.Accounts
-  alias PhoenixTemplateWeb.UserAuth
-  import PhoenixTemplate.AccountsFixtures
+  alias ReadableApi.Accounts
+  alias ReadableApiWeb.UserAuth
+  import ReadableApi.AccountsFixtures
 
-  @remember_me_cookie "_phoenix_template_web_user_remember_me"
+  @remember_me_cookie "_readable_api_web_user_remember_me"
 
   setup %{conn: conn} do
     conn =
       conn
-      |> Map.replace!(:secret_key_base, PhoenixTemplateWeb.Endpoint.config(:secret_key_base))
+      |> Map.replace!(:secret_key_base, ReadableApiWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
     %{user: user_fixture(), conn: conn}
@@ -65,7 +65,7 @@ defmodule PhoenixTemplateWeb.UserAuthTest do
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
       live_socket_id = "users_sessions:abcdef-token"
-      PhoenixTemplateWeb.Endpoint.subscribe(live_socket_id)
+      ReadableApiWeb.Endpoint.subscribe(live_socket_id)
 
       conn
       |> put_session(:live_socket_id, live_socket_id)

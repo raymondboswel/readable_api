@@ -1,7 +1,7 @@
-defmodule PhoenixTemplateWeb.UserResetPasswordController do
-  use PhoenixTemplateWeb, :controller
+defmodule ReadableApiWeb.UserResetPasswordController do
+  use ReadableApiWeb, :controller
 
-  alias PhoenixTemplate.Accounts
+  alias ReadableApi.Accounts
 
   plug :get_user_by_reset_password_token when action in [:edit, :update]
 

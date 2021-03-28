@@ -1,8 +1,8 @@
-defmodule PhoenixTemplateWeb.API.V1.UserSettingsController do
-  use PhoenixTemplateWeb, :controller
+defmodule ReadableApiWeb.API.V1.UserSettingsController do
+  use ReadableApiWeb, :controller
 
-  alias PhoenixTemplate.Accounts
-  alias PhoenixTemplateWeb.UserAuth
+  alias ReadableApi.Accounts
+  alias ReadableApiWeb.UserAuth
 
   plug :assign_email_and_password_changesets
 

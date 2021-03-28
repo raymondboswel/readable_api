@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :phoenix_template, PhoenixTemplate.Repo,
+config :readable_api, ReadableApi.Repo,
   username: "root",
   password: "",
-  database: "phoenix_template_dev",
+  database: "readable_api_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :phoenix_template, PhoenixTemplate.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :phoenix_template, PhoenixTemplateWeb.Endpoint,
+config :readable_api, ReadableApiWeb.Endpoint,
   http: [port: 4100],
   debug_errors: true,
   code_reloader: true,
@@ -55,13 +55,13 @@ config :phoenix_template, PhoenixTemplateWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :phoenix_template, PhoenixTemplateWeb.Endpoint,
+config :readable_api, ReadableApiWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/phoenix_template_web/(live|views)/.*(ex)$",
-      ~r"lib/phoenix_template_web/templates/.*(eex)$"
+      ~r"lib/readable_api_web/(live|views)/.*(ex)$",
+      ~r"lib/readable_api_web/templates/.*(eex)$"
     ]
   ]
 

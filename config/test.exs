@@ -8,16 +8,16 @@ config :bcrypt_elixir, :log_rounds, 1
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :phoenix_template, PhoenixTemplate.Repo,
+config :readable_api, ReadableApi.Repo,
   username: "root",
   password: "vagrant",
-  database: "phoenix_template_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "readable_api_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "mysql.local",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :phoenix_template, PhoenixTemplateWeb.Endpoint,
+config :readable_api, ReadableApiWeb.Endpoint,
   http: [port: 4002],
   server: false
 

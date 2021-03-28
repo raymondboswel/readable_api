@@ -1,3 +1,3 @@
-defmodule PhoenixTemplateWeb.UserSessionView do
-  use PhoenixTemplateWeb, :view
+defmodule ReadableApiWeb.UserSessionView do
+  use ReadableApiWeb, :view
 end

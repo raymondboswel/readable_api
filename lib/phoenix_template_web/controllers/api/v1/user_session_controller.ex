@@ -1,8 +1,8 @@
-defmodule PhoenixTemplateWeb.API.V1.UserSessionController do
-  use PhoenixTemplateWeb, :controller
+defmodule ReadableApiWeb.API.V1.UserSessionController do
+  use ReadableApiWeb, :controller
 
-  alias PhoenixTemplate.Accounts
-  alias PhoenixTemplateWeb.UserAuth
+  alias ReadableApi.Accounts
+  alias ReadableApiWeb.UserAuth
 
   def new(conn, _params) do
     render(conn, "new.html", error_message: nil)
@@ -19,7 +19,7 @@ defmodule PhoenixTemplateWeb.API.V1.UserSessionController do
       user ->
         token = Accounts.generate_user_session_token(user)
         res = conn
-        |> put_resp_cookie("app-auth", %{token: token}, http_only: true, domain: "phoenix_template.ai", sign: true)
+        |> put_resp_cookie("app-auth", %{token: token}, http_only: true, domain: "readable_api.ai", sign: true)
         |> put_resp_cookie("app-auth-local", %{token: token}, http_only: true, domain: "localhost", sign: true)
         |> send_resp(200, "")
       user == nil ->

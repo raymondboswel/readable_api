@@ -1,3 +1,3 @@
-defmodule PhoenixTemplateWeb.UserRegistrationView do
-  use PhoenixTemplateWeb, :view
+defmodule ReadableApiWeb.UserRegistrationView do
+  use ReadableApiWeb, :view
 end
