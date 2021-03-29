@@ -92,11 +92,23 @@ defmodule ReadableApiWeb.UserAuth do
     # {user_token, conn} = ensure_user_token(conn)
     # user = user_token && Accounts.get_user_by_session_token(user_token)
     conn = fetch_cookies(conn, signed: ~w(app-auth app-auth-local))
-    IO.inspect conn.cookies["app-auth"].token
-    user_token = conn.cookies["app-auth"].token
-    user = user_token && Accounts.get_user_by_session_token(user_token)
-    IO.inspect user
-    assign(conn, :current_user, user)
+    IO.inspect conn
+    # IO.inspect conn.cookies["app-auth"].token
+
+    auth_cookie = conn.cookies["app-auth"] || conn.cookies["app-auth-local"]
+
+    IO.inspect auth_cookie
+    IO.inspect is_nil(auth_cookie)
+    if is_nil(auth_cookie) do
+      IO.inspect("Cookie nil, should send 401")
+      conn
+    else
+      IO.inspect("Setting current user")
+      user_token = auth_cookie.token
+      user = user_token && Accounts.get_user_by_session_token(user_token)
+      IO.inspect user
+      assign(conn, :current_user, user)
+    end
   end
 
   defp ensure_user_token(conn) do
@@ -137,10 +149,11 @@ defmodule ReadableApiWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
-      |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> put_status(:unauthorized)
+      |> put_view(ReadableApiWeb.API.V1.ErrorView)
+      |> Phoenix.Controller.render("401.json")
       |> halt()
+
     end
   end
 
