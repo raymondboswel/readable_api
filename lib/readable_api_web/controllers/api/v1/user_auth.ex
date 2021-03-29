@@ -71,17 +71,20 @@ defmodule ReadableApiWeb.UserAuth do
   It clears all session data for safety. See renew_session.
   """
   def log_out_user(conn) do
-    user_token = get_session(conn, :user_token)
+    user_token = get_token_from_cookie(conn)
     user_token && Accounts.delete_session_token(user_token)
 
-    if live_socket_id = get_session(conn, :live_socket_id) do
-      ReadableApiWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
-    end
+    # TODO: Make this work for live views as well
+    # if live_socket_id = get_session(conn, :live_socket_id) do
+    #   ReadableApiWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
+    # end
 
     conn
-    |> renew_session()
-    |> delete_resp_cookie(@remember_me_cookie)
-    |> redirect(to: "/")
+    |> send_resp(:ok, "")
+    # TODO: Figure out "remember me" / refresh token functionality.
+    # |> renew_session()
+    # |> delete_resp_cookie(@remember_me_cookie)
+    # |> redirect(to: "/")
   end
 
   @doc """
@@ -108,6 +111,19 @@ defmodule ReadableApiWeb.UserAuth do
       user = user_token && Accounts.get_user_by_session_token(user_token)
       IO.inspect user
       assign(conn, :current_user, user)
+    end
+  end
+
+  defp get_token_from_cookie(conn) do
+    conn = fetch_cookies(conn, signed: ~w(app-auth app-auth-local))
+    IO.inspect conn
+    # IO.inspect conn.cookies["app-auth"].token
+
+    auth_cookie = conn.cookies["app-auth"] || conn.cookies["app-auth-local"]
+    if is_nil(auth_cookie) do
+      nil
+    else
+      auth_cookie.token
     end
   end
 
