@@ -99,12 +99,24 @@ defmodule ReadableApiWeb.UserAuth do
     # IO.inspect conn.cookies["app-auth"].token
 
     auth_cookie = conn.cookies["app-auth"] || conn.cookies["app-auth-local"]
+    remember_cookie = conn.cookies["app-remember-me"] || conn.cookies["app-remember-me-local"]
 
     IO.inspect auth_cookie
     IO.inspect is_nil(auth_cookie)
     if is_nil(auth_cookie) do
-      IO.inspect("Cookie nil, should send 401")
-      conn
+      # refresh if possible
+      if not is_nil(remember_cookie) do
+        IO.inspect("Setting current user")
+        IO.inspect("Also refreshing")
+        user_token = auth_cookie.token
+        user = user_token && Accounts.get_user_by_session_token(user_token)
+        IO.inspect user
+        assign(conn, :current_user, user)
+        |> put_resp_cookie("app-auth", %{token: user_token}, max_age: @session_max_age, http_only: true, domain: "readable_api.ai", sign: true)
+        |> put_resp_cookie("app-auth-local", %{token: user_token}, max_age: @session_max_age, http_only: true, domain: "localhost", sign: true)
+      else
+        conn
+      end
     else
       IO.inspect("Setting current user")
       user_token = auth_cookie.token
