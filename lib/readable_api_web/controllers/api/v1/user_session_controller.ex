@@ -4,8 +4,10 @@ defmodule ReadableApiWeb.API.V1.UserSessionController do
   alias ReadableApi.Accounts
   alias ReadableApiWeb.UserAuth
 
-  @session_max_age 60 * 60 * 1
-  @remember_max_age 60 * 60 *24 * 14
+  # @session_max_age 60 * 60 * 1
+  # @remember_max_age 60 * 60 *24 * 14
+  @session_max_age 60
+  @remember_max_age 60 * 4
 
   def new(conn, _params) do
     render(conn, "new.html", error_message: nil)
@@ -22,21 +24,10 @@ defmodule ReadableApiWeb.API.V1.UserSessionController do
       user ->
 
       token = Accounts.generate_user_session_token(user)
-
-      # remember_me_expiry = Timex.today() |> Timex.shift(weeks: 2) |> Timex.format!("{ISO:Extended:Z}")
-      # session_expiry = = Timex.today() |> Timex.shift(hours: 2) |> Timex.format!("{ISO:Extended:Z}")
-
-      conn = if Map.has_key?(user_params, "remember_me") && user_params["remember_me"] == true do
-        conn
-        |> put_resp_cookie("app-remember-me", %{token: token}, max_age: @remember_max_age, http_only: true, domain: "readable_api.ai", sign: true)
-        |> put_resp_cookie("app-remember-me-local", %{token: token}, max_age: @remember_max_age, http_only: true, domain: "localhost", sign: true)
-      else
-        conn
-      end
-
-       conn
-        |> put_resp_cookie("app-auth", %{token: token}, max_age: @session_max_age, http_only: true, domain: "readable_api.ai", sign: true)
-        |> put_resp_cookie("app-auth-local", %{token: token}, max_age: @session_max_age, http_only: true, domain: "localhost", sign: true)
+      IO.inspect user_params
+      conn
+        |> UserAuth.maybe_write_remember_me_cookie(token, user_params)
+        |> UserAuth.write_auth_cookie(token)
         |> send_resp(200, "")
       user == nil ->
         conn

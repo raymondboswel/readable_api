@@ -8,6 +8,10 @@ defmodule ReadableApiWeb.UserAuth do
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
   # the token expiry itself in UserToken.
+  # @session_max_age 60 * 60 * 1
+  # @remember_max_age 60 * 60 *24 * 14
+  @session_max_age 60
+  @remember_max_age 60 * 4
   @max_age 60 * 60 * 24 * 60
   @remember_me_cookie "_readable_api_web_user_remember_me"
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
@@ -24,24 +28,34 @@ defmodule ReadableApiWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
-  def log_in_user(conn, user, params \\ %{}) do
-    token = Accounts.generate_user_session_token(user)
-    user_return_to = get_session(conn, :user_return_to)
+  # def log_in_user(conn, user, params \\ %{}) do
+  #   token = Accounts.generate_user_session_token(user)
+  #   user_return_to = get_session(conn, :user_return_to)
 
-    conn
-    |> renew_session()
-    |> put_session(:user_token, token)
-    |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
-    |> maybe_write_remember_me_cookie(token, params)
-    |> redirect(to: user_return_to || signed_in_path(conn))
+  #   conn
+  #   |> renew_session()
+  #   |> put_session(:user_token, token)
+  #   |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
+  #   |> maybe_write_remember_me_cookie(token, params)
+  #   |> redirect(to: user_return_to || signed_in_path(conn))
+  # end
+
+  def maybe_write_remember_me_cookie(conn, token, %{"remember_me" => true}) do
+    write_remember_me_cookie(conn, token)
   end
 
-  defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
-    put_resp_cookie(conn, @remember_me_cookie, token, @remember_me_options)
+  def write_remember_me_cookie(conn, token) do
+    conn
+    |> put_resp_cookie("app-remember-me", %{token: token}, max_age: @remember_max_age, http_only: true, domain: "readable.ai", sign: true)
   end
 
-  defp maybe_write_remember_me_cookie(conn, _token, _params) do
+  def maybe_write_remember_me_cookie(conn, _token, _params) do
     conn
+  end
+
+  def write_auth_cookie(conn, token) do
+    conn
+    |> put_resp_cookie("app-auth", %{token: token}, same_site: "Lax", max_age: 60, http_only: true, domain: "readable.ai", sign: true)
   end
 
   # This function renews the session ID and erases the whole
@@ -92,37 +106,35 @@ defmodule ReadableApiWeb.UserAuth do
   and remember me token.
   """
   def fetch_current_user(conn, _opts) do
-    # {user_token, conn} = ensure_user_token(conn)
-    # user = user_token && Accounts.get_user_by_session_token(user_token)
-    conn = fetch_cookies(conn, signed: ~w(app-auth app-auth-local))
-    IO.inspect conn
-    # IO.inspect conn.cookies["app-auth"].token
+
+    conn = fetch_cookies(conn, signed: ~w(app-auth app-auth-local app-remember-me app-remember-me-local))
 
     auth_cookie = conn.cookies["app-auth"] || conn.cookies["app-auth-local"]
     remember_cookie = conn.cookies["app-remember-me"] || conn.cookies["app-remember-me-local"]
 
-    IO.inspect auth_cookie
-    IO.inspect is_nil(auth_cookie)
     if is_nil(auth_cookie) do
       # refresh if possible
+      IO.inspect "Got nil auth cookie"
       if not is_nil(remember_cookie) do
-        IO.inspect("Setting current user")
-        IO.inspect("Also refreshing")
-        user_token = auth_cookie.token
+        IO.inspect "Has refresh token"
+        user_token = remember_cookie.token
         user = user_token && Accounts.get_user_by_session_token(user_token)
-        IO.inspect user
+        # If user refreshes using refresh token, reset both auth and refresh tokens
+        # Invalidate current session token before issueing new one
+        Accounts.delete_session_token(user_token)
+        user_token = Accounts.generate_user_session_token(user)
         assign(conn, :current_user, user)
-        |> put_resp_cookie("app-auth", %{token: user_token}, max_age: @session_max_age, http_only: true, domain: "readable_api.ai", sign: true)
-        |> put_resp_cookie("app-auth-local", %{token: user_token}, max_age: @session_max_age, http_only: true, domain: "localhost", sign: true)
+        |> write_remember_me_cookie(user_token)
+        |> write_auth_cookie(user_token)
       else
         conn
       end
     else
-      IO.inspect("Setting current user")
       user_token = auth_cookie.token
       user = user_token && Accounts.get_user_by_session_token(user_token)
-      IO.inspect user
+      # Renew cookie on every request to implement "sliding session"
       assign(conn, :current_user, user)
+      |> put_resp_cookie("app-auth", %{token: user_token}, max_age: @session_max_age, http_only: true, domain: "readable.ai", sign: true)
     end
   end
 

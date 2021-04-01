@@ -50,6 +50,6 @@ defmodule ReadableApiWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug CORSPlug, origin: ["http://localhost:3000"]
+  plug CORSPlug, origin: ["http://localhost:3000", "http://readable.ai:3000"]
   plug ReadableApiWeb.Router
 end
