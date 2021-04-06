@@ -106,17 +106,32 @@ defmodule ReadableApiWeb.UserAuth do
   and remember me token.
   """
   def fetch_current_user(conn, _opts) do
-
     conn = fetch_cookies(conn, signed: ~w(app-auth app-auth-local app-remember-me app-remember-me-local))
-
     auth_cookie = conn.cookies["app-auth"] || conn.cookies["app-auth-local"]
-    remember_cookie = conn.cookies["app-remember-me"] || conn.cookies["app-remember-me-local"]
+    auth_header = get_req_header(conn, "authorization")
+    if is_nil(auth_cookie) do
+      handle_header_auth(conn, auth_header)
+    else
+      handle_cookie_auth(conn, auth_cookie)
+    end
+  end
 
+  defp handle_header_auth(conn, auth_header) do
+    header = List.first(auth_header)
+    user = case ReadableApi.Token.verify_and_validate(header) do
+      {:ok, %{"token" => token}} ->
+        token && Accounts.get_user_by_session_token(Base.decode64!(token))
+      _ ->
+        nil
+      end
+    assign(conn, :current_user, user)
+  end
+
+  defp handle_cookie_auth(conn, auth_cookie) do
     if is_nil(auth_cookie) do
       # refresh if possible
-      IO.inspect "Got nil auth cookie"
+      remember_cookie = conn.cookies["app-remember-me"] || conn.cookies["app-remember-me-local"]
       if not is_nil(remember_cookie) do
-        IO.inspect "Has refresh token"
         user_token = remember_cookie.token
         user = user_token && Accounts.get_user_by_session_token(user_token)
         # If user refreshes using refresh token, reset both auth and refresh tokens

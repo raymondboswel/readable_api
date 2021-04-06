@@ -30,6 +30,8 @@ config :readable_api, ReadableApiWeb.Endpoint,
     ]
   ]
 
+config :joken, default_signer: "secret"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
