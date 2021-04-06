@@ -19,6 +19,7 @@ defmodule ReadableApiWeb.Router do
   scope "/api/v1", ReadableApiWeb.API.V1, as: :api_v1_open do
     pipe_through :api
     post "/user/authenticate", UserSessionController, :create
+    post "/user/renew", UserSessionController, :renew
     post "/user/register", UserRegistrationController, :create
     delete "/user/log_out", UserSessionController, :delete
   end

@@ -28,16 +28,35 @@ defmodule ReadableApiWeb.API.V1.UserSessionController do
       user ->
         token = Accounts.generate_user_session_token(user)
         jwt = jwt(token)
-        IO.inspect jwt
+        refresh_jwt = refresh_jwt(token)
         conn
           |> UserAuth.maybe_write_remember_me_cookie(token, user_params)
           |> UserAuth.write_auth_cookie(token)
-          |> render("auth_success.json", token: jwt)
+          |> render("auth_success.json", token: jwt, refresh_token: refresh_jwt)
     end
   end
 
-  def renew do
+  def renew(conn, _) do
+    auth_header = get_req_header(conn, "authorization")
+    header = List.first(auth_header)
 
+    enc_token = case ReadableApi.RefreshToken.verify_and_validate(header) do
+      {:ok, %{"token" => token}} ->
+        token
+      _ ->
+        nil
+      end
+
+    token = Base.decode64!(enc_token)
+    user = Accounts.get_user_by_session_token(token)
+    Accounts.delete_session_token(token)
+    user_token = Accounts.generate_user_session_token(user)
+
+    jwt = jwt(user_token)
+    refresh_jwt = refresh_jwt(token)
+
+    conn
+    |> render("auth_success.json", token: jwt, refresh_token: refresh_jwt)
   end
 
   def delete(conn, _params) do
@@ -47,7 +66,11 @@ defmodule ReadableApiWeb.API.V1.UserSessionController do
 
   defp jwt(token) do
     extra_claims = %{ "token" => Base.encode64(token)}
-    IO.inspect Base.encode64(token)
-    token_with_default_plus_custom_claims = ReadableApi.Token.generate_and_sign!(extra_claims)
+    token_with_claims = ReadableApi.Token.generate_and_sign!(extra_claims)
+  end
+
+  defp refresh_jwt(token) do
+    extra_claims = %{ "token" => Base.encode64(token)}
+    token_with_claims = ReadableApi.RefreshToken.generate_and_sign!(extra_claims)
   end
 end
