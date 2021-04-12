@@ -23,6 +23,11 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# Configure session expiry time
+config :readable_api, :session,
+  session_max_age: 60,
+  remember_max_age: 60 * 4
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 

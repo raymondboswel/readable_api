@@ -4,10 +4,8 @@ defmodule ReadableApiWeb.API.V1.UserSessionController do
   alias ReadableApi.Accounts
   alias ReadableApiWeb.UserAuth
 
-  # @session_max_age 60 * 60 * 1
-  # @remember_max_age 60 * 60 *24 * 14
-  @session_max_age 60
-  @remember_max_age 60 * 4
+  @session_max_age Application.get_env(:readable_api, :session, :session_max_age)
+  @remember_max_age Application.get_env(:readable_api, :session, :remember_max_age)
 
   def new(conn, _params) do
     render(conn, "new.html", error_message: nil)

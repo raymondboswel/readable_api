@@ -8,13 +8,10 @@ defmodule ReadableApiWeb.UserAuth do
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
   # the token expiry itself in UserToken.
-  # @session_max_age 60 * 60 * 1
-  # @remember_max_age 60 * 60 *24 * 14
-  @session_max_age 60
-  @remember_max_age 60 * 4
-  @max_age 60 * 60 * 24 * 60
-  @remember_me_cookie "_readable_api_web_user_remember_me"
-  @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
+
+  @session_max_age Application.get_env(:readable_api, :session, :session_max_age)
+  @remember_max_age Application.get_env(:readable_api, :session, :remember_max_age)
+
 
   @doc """
   Logs the user in.
@@ -55,7 +52,7 @@ defmodule ReadableApiWeb.UserAuth do
 
   def write_auth_cookie(conn, token) do
     conn
-    |> put_resp_cookie("app-auth", %{token: token}, same_site: "Lax", max_age: 60, http_only: true, domain: "readable.ai", sign: true)
+    |> put_resp_cookie("app-auth", %{token: token}, same_site: "Lax", max_age: @session_max_age, http_only: true, domain: "readable.ai", sign: true)
   end
 
   # This function renews the session ID and erases the whole
@@ -116,7 +113,12 @@ defmodule ReadableApiWeb.UserAuth do
     end
   end
 
+  defp handle_header_auth(conn, auth_header = []) do
+    assign(conn, :current_user, nil)
+  end
+
   defp handle_header_auth(conn, auth_header) do
+    IO.inspect auth_header
     header = List.first(auth_header)
     user = case ReadableApi.Token.verify_and_validate(header) do
       {:ok, %{"token" => token}} ->
