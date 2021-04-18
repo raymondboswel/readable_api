@@ -9,8 +9,7 @@ defmodule ReadableApiWeb.UserAuth do
   # If you want bump or reduce this value, also change
   # the token expiry itself in UserToken.
 
-  @session_max_age Application.get_env(:readable_api, :session, :session_max_age)
-  @remember_max_age Application.get_env(:readable_api, :session, :remember_max_age)
+  @session_config Application.get_env(:readable_api, :session)
 
 
   @doc """
@@ -42,8 +41,10 @@ defmodule ReadableApiWeb.UserAuth do
   end
 
   def write_remember_me_cookie(conn, token) do
+    IO.inspect "Writing Remember me"
+    IO.inspect(@session_config[:remember_max_age])
     conn
-    |> put_resp_cookie("app-remember-me", %{token: token}, max_age: @remember_max_age, http_only: true, domain: "readable.ai", sign: true)
+    |> put_resp_cookie("app-remember-me", %{token: token}, max_age: @session_config[:remember_max_age], http_only: true, domain: "readable.ai", sign: true)
   end
 
   def maybe_write_remember_me_cookie(conn, _token, _params) do
@@ -52,7 +53,7 @@ defmodule ReadableApiWeb.UserAuth do
 
   def write_auth_cookie(conn, token) do
     conn
-    |> put_resp_cookie("app-auth", %{token: token}, same_site: "Lax", max_age: @session_max_age, http_only: true, domain: "readable.ai", sign: true)
+    |> put_resp_cookie("app-auth", %{token: token}, same_site: "Lax", max_age: @session_config[:session_max_age], http_only: true, domain: "readable.ai", sign: true)
   end
 
   # This function renews the session ID and erases the whole

@@ -14,6 +14,8 @@ defmodule ReadableApiWeb.API.V1.UserSessionController do
   def create(conn, %{"user" => user_params}) do
     %{"email" => email, "password" => password} = user_params
     user = Accounts.get_user_by_email_and_password(email, password)
+
+    IO.inspect user
     cond do
       user == nil ->
         conn
@@ -25,8 +27,10 @@ defmodule ReadableApiWeb.API.V1.UserSessionController do
         |> render("auth_fail.json", error_message: "Please confirm your email address and try again")
       user ->
         token = Accounts.generate_user_session_token(user)
+        IO.inspect(token)
         jwt = jwt(token)
         refresh_jwt = refresh_jwt(token)
+        IO.inspect "Writing cookies"
         conn
           |> UserAuth.maybe_write_remember_me_cookie(token, user_params)
           |> UserAuth.write_auth_cookie(token)

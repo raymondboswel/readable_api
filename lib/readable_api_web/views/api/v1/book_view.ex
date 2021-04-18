@@ -11,6 +11,7 @@ defmodule ReadableApiWeb.API.V1.BookView do
 
   def render("book.json", %{book: book}) do
     %{
+      id: book.id,
       title: book.title,
       image_url: book.image_url
     }
