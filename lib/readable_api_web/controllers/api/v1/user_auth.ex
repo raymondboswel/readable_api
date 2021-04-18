@@ -41,8 +41,6 @@ defmodule ReadableApiWeb.UserAuth do
   end
 
   def write_remember_me_cookie(conn, token) do
-    IO.inspect "Writing Remember me"
-    IO.inspect(@session_config[:remember_max_age])
     conn
     |> put_resp_cookie("app-remember-me", %{token: token}, max_age: @session_config[:remember_max_age], http_only: true, domain: "readable.ai", sign: true)
   end
@@ -152,7 +150,7 @@ defmodule ReadableApiWeb.UserAuth do
       user = user_token && Accounts.get_user_by_session_token(user_token)
       # Renew cookie on every request to implement "sliding session"
       assign(conn, :current_user, user)
-      |> put_resp_cookie("app-auth", %{token: user_token}, max_age: @session_max_age, http_only: true, domain: "readable.ai", sign: true)
+      |> write_auth_cookie(user_token)
     end
   end
 
