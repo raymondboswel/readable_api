@@ -88,15 +88,15 @@ bin/readable_api rpc "Release.Migrate.rollback"
 
 
 # Mimic the production setup.
-The standard setup aims to mimic the production setup approximately, however, is has a few point where it deviates 
+The standard setup aims to mimic the production setup approximately, however, is has a few point where it deviates
 significantly from what a developer would experience when developing on a production environment:
-- The existence of primary and secondary servers. 
+- The existence of primary and secondary servers.
 - Domain names, especially subdomain names that affect business logic.
-The first point forces the BE to be stateless, and it is not always easy to always test the consequences of having multiple 
+The first point forces the BE to be stateless, and it is not always easy to always test the consequences of having multiple
 servers interact with the database. Sometimes you might want to test clustering, sometimes you might want to have a task execute
-on only one server. For these cases you might want to try and get even closer to the full production setup. 
+on only one server. For these cases you might want to try and get even closer to the full production setup.
 ## Setup
-The steps to produce a 
+The steps to produce a
 more realistic setup is slightly more involved and requires that you setup local wildcard hostnames. This will differ between OS's
 however, for linux the steps are simple:
 Edit the file `/etc/NetworkManager/NetworkManager.conf`, and add the line `dns=dnsmasq` to the `[main]` section, it will look like this:

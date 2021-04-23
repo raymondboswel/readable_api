@@ -28,6 +28,7 @@ defmodule ReadableApiWeb.Router do
     pipe_through [:api, :fetch_current_user, :require_authenticated_user, :put_secure_browser_headers ]
     put "/user/settings", UserSettingsController, :update
     resources "/books", BookController, except: [:new, :edit]
+    resources "/clubs", ClubController, except: [:new, :edit]
   end
 
 
