@@ -7,6 +7,5 @@ defmodule ReadableApi.Repo.Migrations.CreateClubs do
 
       timestamps()
     end
-
   end
 end

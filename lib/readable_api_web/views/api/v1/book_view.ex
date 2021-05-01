@@ -18,8 +18,10 @@ defmodule ReadableApiWeb.API.V1.BookView do
   end
 
   def render("auth_fail.json", %{error_message: error_message}) do
-    %{data: %{
-         message: error_message
-      }}
+    %{
+      data: %{
+        message: error_message
+      }
+    }
   end
 end

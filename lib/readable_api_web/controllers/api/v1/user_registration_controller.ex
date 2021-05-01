@@ -15,7 +15,8 @@ defmodule ReadableApiWeb.API.V1.UserRegistrationController do
           )
 
         # TODO: Send message in response explaining required email confirmation
-        res = conn
+        res =
+          conn
           |> send_resp(200, "")
 
       {:error, %Ecto.Changeset{} = changeset} ->

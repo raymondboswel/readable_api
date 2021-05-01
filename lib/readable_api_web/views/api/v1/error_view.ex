@@ -17,5 +17,4 @@ defmodule ReadableApiWeb.API.V1.ErrorView do
   def render("401.json", %{books: books}) do
     %{error: "Not authenticated"}
   end
-
 end

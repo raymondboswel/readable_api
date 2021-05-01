@@ -8,6 +8,5 @@ defmodule ReadableApi.Repo.Migrations.CreateClubRoles do
 
       timestamps()
     end
-
   end
 end

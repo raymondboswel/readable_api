@@ -10,7 +10,7 @@ defmodule ReadableApiWeb.API.V1.ClubController do
   def index(conn, _params) do
     user = conn.assigns.current_user
     clubs = Clubs.list_clubs(user)
-    IO.inspect (clubs)
+    IO.inspect(clubs)
     render(conn, "index.json", clubs: clubs)
   end
 
@@ -22,6 +22,7 @@ defmodule ReadableApiWeb.API.V1.ClubController do
 
   def create(conn, %{"club" => club_params}) do
     user = conn.assigns.current_user
+
     with {:ok, %Club{} = club} <- Clubs.create_club(club_params, user) do
       conn
       |> put_status(:created)

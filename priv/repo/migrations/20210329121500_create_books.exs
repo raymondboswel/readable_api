@@ -8,6 +8,5 @@ defmodule ReadableApi.Repo.Migrations.CreateBooks do
 
       timestamps()
     end
-
   end
 end

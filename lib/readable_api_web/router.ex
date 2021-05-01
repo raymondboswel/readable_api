@@ -25,13 +25,18 @@ defmodule ReadableApiWeb.Router do
   end
 
   scope "/api/v1", ReadableApiWeb.API.V1, as: :api_v1 do
-    pipe_through [:api, :fetch_current_user, :require_authenticated_user, :put_secure_browser_headers ]
+    pipe_through [
+      :api,
+      :fetch_current_user,
+      :require_authenticated_user,
+      :put_secure_browser_headers
+    ]
+
     put "/user/settings", UserSettingsController, :update
     resources "/books", BookController, except: [:new, :edit]
     resources "/clubs", ClubController, except: [:new, :edit]
     get "/clubs/:id/books", ClubController, :club_books
   end
-
 
   scope "/", ReadableApiWeb do
     pipe_through :browser

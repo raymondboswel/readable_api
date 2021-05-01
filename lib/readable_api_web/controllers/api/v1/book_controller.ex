@@ -13,7 +13,10 @@ defmodule ReadableApiWeb.API.V1.BookController do
   end
 
   def create(conn, %{"book" => book_params}) do
-    with {:ok, %Book{} = book} <- Library.create_book(book_params) do
+    user = conn.assigns.current_user
+
+    with {:ok, %Book{} = book} <- Library.create_book(book_params),
+         user <- Library.assoc_book_with_user(user, book) do
       conn
       |> put_status(:created)
       |> render("show.json", book: book)
@@ -39,5 +42,14 @@ defmodule ReadableApiWeb.API.V1.BookController do
     with {:ok, %Book{}} <- Library.delete_book(book) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def make_book_available_in_club(conn, %{
+        "id" => book_id,
+        "club_id" => club_id,
+        "availability_type_ids" => availability_type_ids
+                                  }) do
+    user = conn.assigns.current_user
+    Library.make_available_in_club(user, book_id,  club_id, availability_type_ids)
   end
 end

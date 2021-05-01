@@ -12,14 +12,14 @@ defmodule ReadableApi.Accounts.User do
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
     has_many(:club_users, ReadableApi.Clubs.ClubUser)
-    has_many(:clubs,  through: [:club_users, :club])
+    has_many(:clubs, through: [:club_users, :club])
     many_to_many(:books, Book, join_through: UserBook)
     timestamps()
   end
 
   def user_book_changeset(%User{} = user, book = %Book{}) do
     res = user |> Ecto.Changeset.change()
-      # associate projects to the user
+    # associate projects to the user
     res |> Ecto.Changeset.put_assoc(:books, [book | user.books])
   end
 

@@ -30,7 +30,7 @@ defmodule ReadableApiWeb.API.V1.UserSettingsController do
         |> redirect(to: Routes.user_settings_path(conn, :edit))
 
       {:error, changeset} ->
-        IO.inspect changeset
+        IO.inspect(changeset)
         render(conn, "edit.html", email_changeset: changeset)
     end
   end

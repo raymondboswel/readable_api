@@ -8,6 +8,7 @@ defmodule ReadableApi.Library do
 
   alias ReadableApi.Library.Book
   alias ReadableApi.Accounts.User
+  alias ReadableApi.Clubs.UserClubBook
 
   @doc """
   Returns the list of books.
@@ -44,13 +45,15 @@ defmodule ReadableApi.Library do
   ## Examples
 
       iex> create_book(%{field: value})
-      {:ok, %Book{}}
+      {:o%UserClubBookk, %Book{}}
 
       iex> create_book(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
   def create_book(attrs \\ %{}) do
+    # TODO: Check if book exists, if so, return {:ok, book}. This
+    # will make books reusable across users, preventing duplicates to an extent
     %Book{}
     |> Book.changeset(attrs)
     |> Repo.insert()
@@ -104,9 +107,15 @@ defmodule ReadableApi.Library do
   end
 
   def assoc_book_with_user(user, book) do
-    user |> Repo.preload(:books)
+    user
+    |> Repo.preload(:books)
     |> User.user_book_changeset(book)
-    |> Repo.update!
+    |> Repo.update!()
   end
 
+  def make_available_in_club(user, book_id, club_id, availability_ids) do
+    %UserClubBook{}
+    |> UserClubBook.changeset(%{user_id: user.id, club_id: club_id, book_id: book_id})
+    |> Repo.insert!
+  end
 end
