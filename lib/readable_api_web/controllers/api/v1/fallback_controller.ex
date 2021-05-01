@@ -1,4 +1,4 @@
-defmodule ReadableApiWeb.FallbackController do
+defmodule ReadableApiWeb.API.V1.FallbackController do
   @moduledoc """
   Translates controller action results into valid `Plug.Conn` responses.
 

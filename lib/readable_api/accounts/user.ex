@@ -8,7 +8,8 @@ defmodule ReadableApi.Accounts.User do
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
-
+    has_many(:club_users, ReadableApi.Clubs.ClubUser)
+    has_many(:clubs,  through: [:club_users, :club])
     timestamps()
   end
 

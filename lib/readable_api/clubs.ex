@@ -7,7 +7,9 @@ defmodule ReadableApi.Clubs do
   alias ReadableApi.Repo
 
   alias ReadableApi.Clubs.Club
-
+  alias ReadableApi.Clubs.ClubUser
+  alias ReadableApi.Clubs.ClubRole
+  alias Ecto.Multi
   @doc """
   Returns the list of clubs.
 
@@ -19,6 +21,11 @@ defmodule ReadableApi.Clubs do
   """
   def list_clubs do
     Repo.all(Club)
+  end
+
+  def list_clubs(user) do
+    user = Repo.preload(user, :clubs)
+    user.clubs
   end
 
   @doc """
@@ -43,16 +50,26 @@ defmodule ReadableApi.Clubs do
   ## Examples
 
       iex> create_club(%{field: value})
-      {:ok, %Club{}}
+      {:oClubRolek, %Club{}}
 
       iex> create_club(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_club(attrs \\ %{}) do
-    %Club{}
-    |> Club.changeset(attrs)
-    |> Repo.insert()
+  def create_club(attrs \\ %{}, user) do
+    club_changeset =  %Club{} |> Club.changeset(attrs)
+    admin_role = Repo.get_by(ClubRole, reference: "admin")
+    Multi.new()
+    |> Multi.insert(:club, club_changeset)
+    |> Multi.run(:club_user, fn repo, %{club: club} ->
+      club_user_changeset = ClubUser.changeset(%ClubUser{}, %{"user_id" => user.id, "club_id" => club.id, "club_role_id" => admin_role.id})
+      repo.insert(club_user_changeset)
+    end )
+    |> Repo.transaction
+
+    # %Club{users: [user]}
+    # |> Club.changeset(attrs)
+    # |> Repo.insert()
   end
 
   @doc """

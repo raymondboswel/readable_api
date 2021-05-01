@@ -4,7 +4,8 @@ defmodule ReadableApi.Clubs.Club do
 
   schema "clubs" do
     field :name, :string
-
+    has_many(:club_users, ReadableApi.Clubs.ClubUser)
+    has_many(:users,  through: [:club_users, :user])
     timestamps()
   end
 

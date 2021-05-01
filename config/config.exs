@@ -25,8 +25,8 @@ config :logger, :console,
 
 # Configure session expiry time
 config :readable_api, :session,
-  session_max_age: 60,
-  remember_max_age: 60 * 4
+  session_max_age: 60 * 60 * 200,
+  remember_max_age: 60 * 60 * 600
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

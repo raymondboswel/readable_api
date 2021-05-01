@@ -29,6 +29,7 @@ defmodule ReadableApiWeb.Router do
     put "/user/settings", UserSettingsController, :update
     resources "/books", BookController, except: [:new, :edit]
     resources "/clubs", ClubController, except: [:new, :edit]
+    get "/clubs/:id/books", ClubController, :club_books
   end
 
 

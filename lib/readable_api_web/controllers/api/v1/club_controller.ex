@@ -1,18 +1,28 @@
-defmodule ReadableApiWeb.ClubController do
+defmodule ReadableApiWeb.API.V1.ClubController do
   use ReadableApiWeb, :controller
 
   alias ReadableApi.Clubs
   alias ReadableApi.Clubs.Club
+  alias ReadableApi.Library
 
   action_fallback ReadableApiWeb.FallbackController
 
   def index(conn, _params) do
-    clubs = Clubs.list_clubs()
+    user = conn.assigns.current_user
+    clubs = Clubs.list_clubs(user)
+    IO.inspect (clubs)
     render(conn, "index.json", clubs: clubs)
   end
 
+  def club_books(conn, _params) do
+    books = Library.list_books()
+    IO.inspect("Got books")
+    render(conn, "books.json", books: books)
+  end
+
   def create(conn, %{"club" => club_params}) do
-    with {:ok, %Club{} = club} <- Clubs.create_club(club_params) do
+    user = conn.assigns.current_user
+    with {:ok, %Club{} = club} <- Clubs.create_club(club_params, user) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.club_path(conn, :show, club))

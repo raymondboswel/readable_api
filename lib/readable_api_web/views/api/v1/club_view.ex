@@ -1,6 +1,11 @@
-defmodule ReadableApiWeb.ClubView do
+defmodule ReadableApiWeb.API.V1.ClubView do
   use ReadableApiWeb, :view
-  alias ReadableApiWeb.ClubView
+  alias ReadableApiWeb.API.V1.ClubView
+  alias ReadableApiWeb.API.V1.BookView
+
+  def render("books.json", %{books: books}) do
+    %{data: render_many(books, BookView, "book.json")}
+  end
 
   def render("index.json", %{clubs: clubs}) do
     %{data: render_many(clubs, ClubView, "club.json")}
