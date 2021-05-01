@@ -5,7 +5,7 @@ defmodule ReadableApi.Library.Book do
   schema "books" do
     field :image_url, :string
     field :title, :string
-
+    many_to_many(:users, ReabableApi.Accounts.User, join_through: "user_books")
     timestamps()
   end
 

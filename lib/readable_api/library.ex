@@ -7,6 +7,7 @@ defmodule ReadableApi.Library do
   alias ReadableApi.Repo
 
   alias ReadableApi.Library.Book
+  alias ReadableApi.Accounts.User
 
   @doc """
   Returns the list of books.
@@ -101,4 +102,11 @@ defmodule ReadableApi.Library do
   def change_book(%Book{} = book, attrs \\ %{}) do
     Book.changeset(book, attrs)
   end
+
+  def assoc_book_with_user(user, book) do
+    user |> Repo.preload(:books)
+    |> User.user_book_changeset(book)
+    |> Repo.update!
+  end
+
 end
