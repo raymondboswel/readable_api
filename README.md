@@ -9,8 +9,6 @@ In order to get up and running in as little time as possible, the project makes 
 
 3. Run `docker-compose up` to start working.
 
-4. // Ask a developer on the project to share their dev.secret.exs and copy it to `readable_api/config/dev.secret.exs`.
-
 ### Development tasks
 
   * Install dependencies with `docker-compose run readable_api mix deps.get`
