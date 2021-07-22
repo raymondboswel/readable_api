@@ -84,68 +84,6 @@ bin/readable_api rpc "Release.Migrate.rollback"
 ```
 
 
-# Mimic the production setup.
-The standard setup aims to mimic the production setup approximately, however, is has a few point where it deviates
-significantly from what a developer would experience when developing on a production environment:
-- The existence of primary and secondary servers.
-- Domain names, especially subdomain names that affect business logic.
-The first point forces the BE to be stateless, and it is not always easy to always test the consequences of having multiple
-servers interact with the database. Sometimes you might want to test clustering, sometimes you might want to have a task execute
-on only one server. For these cases you might want to try and get even closer to the full production setup.
-## Setup
-The steps to produce a
-more realistic setup is slightly more involved and requires that you setup local wildcard hostnames. This will differ between OS's
-however, for linux the steps are simple:
-Edit the file `/etc/NetworkManager/NetworkManager.conf`, and add the line `dns=dnsmasq` to the `[main]` section, it will look like this:
-```
-[main]
-plugins=ifupdown,keyfile
-dns=dnsmasq
-
-[ifupdown]
-managed=false
-
-[device]
-wifi.scan-rand-mac-address=no
-```
-Let NetworkManager manage `/etc/resolv.conf`:
-```
-sudo rm /etc/resolv.conf ; sudo ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
-```
-Configure readable_api.local
-```
-echo 'address=/.readable_api.local/127.0.0.1' | sudo tee /etc/NetworkManager/dnsmasq.d/readable_api.local-wildcard.conf
-```
-NetworkManager should be reloaded for the changes to take effect.
-```
-sudo systemctl reload NetworkManager
-```
-Verify that your DNS is still operational:
-```
-dig askubuntu.com +short
-151.101.129.69
-151.101.65.69
-151.101.1.69
-151.101.193.69
-```
-And lastly verify that the readable_api.local and subdomains are resolved as 127.0.0.1:
-```
-dig readable_api.local  +short
-127.0.0.1
-127.0.0.1
-127.0.0.1
-```
-Depending on your OS you might need to add an entry for `readable_api.local` in your `/etc/hosts` file pointing to `127.0.0.1` as well.
-Ensure the Nginx block is uncommented in the `docker-compose.yml` file, and ensure all required services are uncommented as well.
-## Different configurations
-By default, primary will run all migrations and seeds, which means secondary should connect first the majority of the time.
-To test handover the steps are to stop the container running secondary, and then to run:
-```
-docker-compose run foodguru.secondary iex --name foodguru@foodguru.secondary --cookie ek61maXukrWtkC6m9MjgmSxXroM3OIcG -S mix phx.server
-```
-From the console you can access the processes and kill and restart as you wish. You can also stop primary and restart it in a similar manner.
-
-
 # ReadableApi
 
 To start your Phoenix server:
