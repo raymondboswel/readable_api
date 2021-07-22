@@ -1,6 +1,3 @@
-# Fastcomm Phoenix Template
-The aim of this project is to provide a solid starting point for new projects, ideally allowing developers to get started on implementation from day1
-
 ## Working with Docker
 In order to get up and running in as little time as possible, the project makes use of docker.
 
