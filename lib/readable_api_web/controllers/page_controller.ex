@@ -2,6 +2,6 @@ defmodule ReadableApiWeb.PageController do
   use ReadableApiWeb, :controller
 
   def index(conn, _params) do
-    redirect(conn, to: "/index.html")
+    render(conn, "index.html")
   end
 end

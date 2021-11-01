@@ -1,41 +1,75 @@
-# Elixir/Phoenix Docker Image
+###
+### Fist Stage - Building the Release
+###
+FROM hexpm/elixir:1.12.1-erlang-24.0.1-alpine-3.13.3 AS build
 
-# Image based on alpine linux. Smaller than full elixir variant
-# Unfortunately build tools increase image size, but are required for development.
+# install build dependencies
+RUN apk add --no-cache build-base npm
 
-# To build run:
-#	docker build -t fastcomm/readable_api:dev ./
+# prepare build dir
+WORKDIR /app
 
-FROM elixir:1.11.2-alpine
-# Metadata
-LABEL "maintainer"="Raymond Boswel" "appname"="Phoenix Server"
+# extend hex timeout
+ENV HEX_HTTP_TIMEOUT=20
 
-# Grab dependencies
-RUN apk update && \
-	apk add inotify-tools libgcc libstdc++ libx11 glib libxrender libxext libintl \
-	ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family build-base npm \
-	&& rm -rf /var/cache/apk/*
-
-# Create a group and user
-RUN addgroup --gid 1000 --system fc_group && adduser --system --uid 1000 fc_user --ingroup fc_group
-
-# Setup project source code
-ENV APP_HOME /home/fc_user/readable_api
-RUN mkdir $APP_HOME
-COPY ./ $APP_HOME
-
-RUN chown -R 1000:1000 $APP_HOME
-
-USER fc_user
-
-WORKDIR $APP_HOME
-
+# install hex + rebar
 RUN mix local.hex --force && \
-	mix archive.install hex phx_new 1.5.8 --force && \
-	mix local.rebar --force
+    mix local.rebar --force
 
-# Important to clean dependencies and rebuild on alpine
-RUN mix deps.clean --all && mix deps.get && mix deps.compile
+# set build ENV as prod
+ENV MIX_ENV=prod
+ENV SECRET_KEY_BASE=nokey
 
-# Run the phoenix server
-CMD mix ecto.setup && mix phx.server
+# Copy over the mix.exs and mix.lock files to load the dependencies. If those
+# files don't change, then we don't keep re-fetching and rebuilding the deps.
+COPY mix.exs mix.lock ./
+COPY config config
+
+RUN mix deps.get --only prod && \
+    mix deps.compile
+
+# install npm dependencies
+COPY assets/package.json assets/package-lock.json ./assets/
+RUN npm --prefix ./assets ci --progress=false --no-audit --loglevel=error
+
+COPY priv priv
+COPY assets assets
+
+# NOTE: If using TailwindCSS, it uses a special "purge" step and that requires
+# the code in `lib` to see what is being used. Uncomment that here before
+# running the npm deploy script if that's the case.
+# COPY lib lib
+
+# build assets
+RUN npm run --prefix ./assets deploy
+RUN mix phx.digest
+
+# copy source here if not using TailwindCSS
+COPY lib lib
+
+# compile and build release
+COPY rel rel
+RUN mix do compile, release
+
+###
+### Second Stage - Setup the Runtime Environment
+###
+
+# prepare release docker image
+FROM alpine:3.13.3 AS app
+RUN apk add --no-cache libstdc++ openssl ncurses-libs
+
+WORKDIR /app
+
+RUN chown nobody:nobody /app
+
+USER nobody:nobody
+
+COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/readable_api ./
+
+ENV HOME=/app
+ENV MIX_ENV=prod
+ENV SECRET_KEY_BASE=nokey
+ENV PORT=4000
+
+CMD ["bin/readable_api", "start"]

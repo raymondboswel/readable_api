@@ -4,10 +4,13 @@ defmodule ReadableApiWeb.API.V1.UserRegistrationController do
   alias ReadableApi.Accounts
   alias ReadableApi.Accounts.User
   alias ReadableApiWeb.UserAuth
+  require Logger
+
+  action_fallback ReadableApiWeb.FallbackController
 
   def create(conn, %{"user" => user_params}) do
-    case Accounts.register_user(user_params) do
-      {:ok, user} ->
+    with {:ok, user} <- Accounts.register_user(user_params) do
+
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
@@ -17,9 +20,6 @@ defmodule ReadableApiWeb.API.V1.UserRegistrationController do
         # TODO: Send message in response explaining required email confirmation
         res = conn
           |> send_resp(200, "")
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
     end
   end
 end

@@ -1,11 +1,21 @@
 use Mix.Config
 
 # Configure your database
+# config :readable_api, ReadableApi.Repo,
+#   username: "root",
+#   password: "",
+#   database: "readable_api_dev",
+#   hostname: "localhost",
+#   show_sensitive_data_on_connection_error: true,
+#   pool_size: 10
+
+# Configure your database
 config :readable_api, ReadableApi.Repo,
-  username: "root",
-  password: "",
-  database: "readable_api_dev",
+  username: "readable",
+  password: "letmein",
+  database: "readable_dev",
   hostname: "localhost",
+  port: "5432",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

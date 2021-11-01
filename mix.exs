@@ -40,6 +40,7 @@ defmodule ReadableApi.MixProject do
       {:phx_gen_auth, "~> 0.6", only: [:dev], runtime: false},
       {:ecto_sql, "~> 3.4"},
       {:myxql, ">= 0.0.0"},
+      {:postgrex, "~> 0.15.13"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.4"},
