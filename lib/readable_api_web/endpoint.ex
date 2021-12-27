@@ -24,7 +24,7 @@ defmodule ReadableApiWeb.Endpoint do
     at: "/",
     from: :readable_api,
     gzip: false,
-    only: ~w(css fonts images js index.html _app favicon.ico robots.txt)
+    only: ~w(assets css fonts images js index.html _app favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -50,6 +50,6 @@ defmodule ReadableApiWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug CORSPlug, origin: ["http://localhost:3000", "http://readable.ai:3000"]
+  plug CORSPlug, origin: ["http://localhost:3000", "http://app.readable.ai:3000", "http://api.readable.ai:3000"]
   plug ReadableApiWeb.Router
 end

@@ -5,12 +5,13 @@ defmodule ReadableApiWeb.UserAuth do
   alias ReadableApi.Accounts
   alias ReadableApiWeb.Router.Helpers, as: Routes
 
+  require Logger
+
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
   # the token expiry itself in UserToken.
 
   @session_config Application.get_env(:readable_api, :session)
-
 
   @doc """
   Logs the user in.
@@ -24,6 +25,7 @@ defmodule ReadableApiWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
+
   # def log_in_user(conn, user, params \\ %{}) do
   #   token = Accounts.generate_user_session_token(user)
   #   user_return_to = get_session(conn, :user_return_to)
@@ -42,7 +44,12 @@ defmodule ReadableApiWeb.UserAuth do
 
   def write_remember_me_cookie(conn, token) do
     conn
-    |> put_resp_cookie("app-remember-me", %{token: token}, max_age: @session_config[:remember_max_age], http_only: true, domain: "readable.ai", sign: true)
+    |> put_resp_cookie("app-remember-me", %{token: token},
+      max_age: @session_config[:remember_max_age],
+      http_only: true,
+      domain: "readable.ai",
+      sign: true
+    )
   end
 
   def maybe_write_remember_me_cookie(conn, _token, _params) do
@@ -51,7 +58,12 @@ defmodule ReadableApiWeb.UserAuth do
 
   def write_auth_cookie(conn, token) do
     conn
-    |> put_resp_cookie("app-auth", %{token: token}, same_site: "Lax", max_age: @session_config[:session_max_age], http_only: true, domain: "readable.ai", sign: true)
+    |> put_resp_cookie("app-auth", %{token: token},
+      max_age: @session_config[:session_max_age],
+      http_only: true,
+      domain: "readable.ai",
+      sign: true
+    )
   end
 
   # This function renews the session ID and erases the whole
@@ -91,6 +103,7 @@ defmodule ReadableApiWeb.UserAuth do
 
     conn
     |> send_resp(:ok, "")
+
     # TODO: Figure out "remember me" / refresh token functionality.
     # |> renew_session()
     # |> delete_resp_cookie(@remember_me_cookie)
@@ -102,9 +115,15 @@ defmodule ReadableApiWeb.UserAuth do
   and remember me token.
   """
   def fetch_current_user(conn, _opts) do
-    conn = fetch_cookies(conn, signed: ~w(app-auth app-auth-local app-remember-me app-remember-me-local))
+    conn =
+      fetch_cookies(conn,
+        signed: ~w(app-auth app-auth-local app-remember-me app-remember-me-local)
+      )
+
     auth_cookie = conn.cookies["app-auth"] || conn.cookies["app-auth-local"]
+    Logger.error(inspect(auth_cookie))
     auth_header = get_req_header(conn, "authorization")
+
     if is_nil(auth_cookie) do
       handle_header_auth(conn, auth_header)
     else
@@ -117,14 +136,18 @@ defmodule ReadableApiWeb.UserAuth do
   end
 
   defp handle_header_auth(conn, auth_header) do
-    IO.inspect auth_header
+    IO.inspect(auth_header)
     header = List.first(auth_header)
-    user = case ReadableApi.Token.verify_and_validate(header) do
-      {:ok, %{"token" => token}} ->
-        token && Accounts.get_user_by_session_token(Base.decode64!(token))
-      _ ->
-        nil
+
+    user =
+      case ReadableApi.Token.verify_and_validate(header) do
+        {:ok, %{"token" => token}} ->
+          token && Accounts.get_user_by_session_token(Base.decode64!(token))
+
+        _ ->
+          nil
       end
+
     assign(conn, :current_user, user)
   end
 
@@ -132,6 +155,7 @@ defmodule ReadableApiWeb.UserAuth do
     if is_nil(auth_cookie) do
       # refresh if possible
       remember_cookie = conn.cookies["app-remember-me"] || conn.cookies["app-remember-me-local"]
+
       if not is_nil(remember_cookie) do
         user_token = remember_cookie.token
         user = user_token && Accounts.get_user_by_session_token(user_token)
@@ -139,6 +163,7 @@ defmodule ReadableApiWeb.UserAuth do
         # Invalidate current session token before issueing new one
         Accounts.delete_session_token(user_token)
         user_token = Accounts.generate_user_session_token(user)
+
         assign(conn, :current_user, user)
         |> write_remember_me_cookie(user_token)
         |> write_auth_cookie(user_token)
@@ -156,10 +181,11 @@ defmodule ReadableApiWeb.UserAuth do
 
   defp get_token_from_cookie(conn) do
     conn = fetch_cookies(conn, signed: ~w(app-auth app-auth-local))
-    IO.inspect conn
+    IO.inspect(conn)
     # IO.inspect conn.cookies["app-auth"].token
 
     auth_cookie = conn.cookies["app-auth"] || conn.cookies["app-auth-local"]
+
     if is_nil(auth_cookie) do
       nil
     else
@@ -209,7 +235,6 @@ defmodule ReadableApiWeb.UserAuth do
       |> put_view(ReadableApiWeb.API.V1.ErrorView)
       |> Phoenix.Controller.render("401.json")
       |> halt()
-
     end
   end
 

@@ -11,4 +11,4 @@
 # and so on) as they will fail if something goes wrong.
 
 
-# ReadableApi.Repo.insert!(%ReadableApi.Clubs.ClubRole{name: "Admin", "admin"})
+ReadableApi.Repo.insert!(%ReadableApi.Clubs.ClubRole{name: "Admin", reference: "admin"})

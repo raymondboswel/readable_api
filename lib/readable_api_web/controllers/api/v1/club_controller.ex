@@ -22,10 +22,9 @@ defmodule ReadableApiWeb.API.V1.ClubController do
 
   def create(conn, %{"club" => club_params}) do
     user = conn.assigns.current_user
-    with {:ok, %Club{} = club} <- Clubs.create_club(club_params, user) do
+    with {:ok, %{club: club, club_user: club_user}} <- Clubs.create_club(club_params, user) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.club_path(conn, :show, club))
       |> render("show.json", club: club)
     end
   end

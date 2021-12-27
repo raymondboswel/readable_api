@@ -2,7 +2,7 @@ use Mix.Config
 # Configure your database
 # Configure your database
 config :readable_api, ReadableApi.Repo,
-  username: "readable",
+  username: "postgres",
   password: "letmein",
   database: "readable_dev",
   hostname: "localhost",
