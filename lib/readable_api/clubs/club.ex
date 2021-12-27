@@ -4,6 +4,7 @@ defmodule ReadableApi.Clubs.Club do
 
   schema "clubs" do
     field :name, :string
+    field :deactivated, :boolean
     has_many(:club_users, ReadableApi.Clubs.ClubUser)
     has_many(:users,  through: [:club_users, :user])
     timestamps()
@@ -12,7 +13,7 @@ defmodule ReadableApi.Clubs.Club do
   @doc false
   def changeset(club, attrs) do
     club
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :deactivated])
     |> validate_required([:name])
   end
 end

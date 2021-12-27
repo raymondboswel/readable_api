@@ -17,6 +17,8 @@ defmodule ReadableApiWeb.API.V1.ClubView do
 
   def render("club.json", %{club: club}) do
     %{id: club.id,
-      name: club.name}
+      name: club.name,
+      deactivated: club.deactivated
+    }
   end
 end
