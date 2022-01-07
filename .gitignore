@@ -36,3 +36,5 @@ npm-debug.log
 /config/prod.secret.exs
 
 .elixir_ls
+
+.env

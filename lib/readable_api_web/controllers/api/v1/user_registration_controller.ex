@@ -4,22 +4,29 @@ defmodule ReadableApiWeb.API.V1.UserRegistrationController do
   alias ReadableApi.Accounts
   alias ReadableApi.Accounts.User
   alias ReadableApiWeb.UserAuth
+  alias ReadableApi.Email
+  alias ReadableApi.Mailer
+
   require Logger
 
   action_fallback ReadableApiWeb.FallbackController
 
   def create(conn, %{"user" => user_params}) do
     with {:ok, user} <- Accounts.register_user(user_params) do
+      {:ok, _} =
+        Accounts.deliver_user_confirmation_instructions(
+          user,
+          &Routes.user_confirmation_url(conn, :confirm, &1)
+        )
 
-        {:ok, _} =
-          Accounts.deliver_user_confirmation_instructions(
-            user,
-            &Routes.user_confirmation_url(conn, :confirm, &1)
-          )
+      # Create your email
+      Email.welcome_email()
+      |> Mailer.deliver_now()
 
-        # TODO: Send message in response explaining required email confirmation
-        res = conn
-          |> send_resp(200, "")
+      # TODO: Send message in response explaining required email confirmation
+      res =
+        conn
+        |> send_resp(200, "")
     end
   end
 end

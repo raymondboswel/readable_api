@@ -51,6 +51,7 @@ defmodule ReadableApi.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:timex, "~> 3.6"},
+      {:bamboo, "~> 1.5"},
       {:joken, "~> 2.0"}
     ]
   end
