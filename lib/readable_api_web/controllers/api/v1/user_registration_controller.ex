@@ -20,8 +20,6 @@ defmodule ReadableApiWeb.API.V1.UserRegistrationController do
         )
 
       # Create your email
-      Email.welcome_email()
-      |> Mailer.deliver_now()
 
       # TODO: Send message in response explaining required email confirmation
       res =

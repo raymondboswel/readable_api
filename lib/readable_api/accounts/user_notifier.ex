@@ -1,4 +1,6 @@
 defmodule ReadableApi.Accounts.UserNotifier do
+  alias ReadableApi.Email
+  alias ReadableApi.Mailer
   # For simplicity, this module simply logs messages to the terminal.
   # You should replace it by a proper email or notification tool, such as:
   #
@@ -8,6 +10,10 @@ defmodule ReadableApi.Accounts.UserNotifier do
   defp deliver(to, body) do
     require Logger
     Logger.debug(body)
+
+    Email.welcome_email(to, body)
+    |> Mailer.deliver_now()
+
     {:ok, %{to: to, body: body}}
   end
 
@@ -15,20 +21,14 @@ defmodule ReadableApi.Accounts.UserNotifier do
   Deliver instructions to confirm account.
   """
   def deliver_confirmation_instructions(user, url) do
-    deliver(user.email, """
+    body =
+      Phoenix.View.render_to_string(
+        ReadableApiWeb.Email.RegistrationEmailView,
+        "registration_email.html",
+        url: url
+      )
 
-    ==============================
-
-    Hi #{user.email},
-
-    You can confirm your account by visiting the URL below:
-
-    #{url}
-
-    If you didn't create an account with us, please ignore this.
-
-    ==============================
-    """)
+    deliver(user.email, body)
   end
 
   @doc """

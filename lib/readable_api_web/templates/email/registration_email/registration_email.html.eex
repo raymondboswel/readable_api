@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+	<style>
+
+	 body {
+	   background: #f4f4f4;
+	   color: #1C303A;
+	 }
+
+	 .center-logo {
+	   display: block;
+	   margin: 0 auto;
+	 }
+
+	 h1 {
+	   font-weight: 700;
+	   color: #1C303A;
+     font-size: 2.5rem;
+	 }
+
+	 p {
+	   color: #1C303A;
+     font-size: 1rem;
+	 }
+
+	 .confirm-button {
+	   display: inline-block;
+	   margin: 0 auto;
+	   background-color: #c9253c;
+	   padding: 10px;
+	   border-radius: 22px;
+	   color: #FFF !important;
+	   text-decoration: none;
+	   font-size: 15px;
+	   text-align: center;
+	 }
+
+	 .token-holder {
+	   display: inline-block;
+	   margin: 0 auto;
+	   border: 2px solid #c9253c;
+	   background-color: #FFF;
+	   padding: 10px;
+	   border-radius: 8px;
+	   color: #c9253c !important;
+	   text-decoration: none;
+	   text-align: center;
+	   font-size: 15px;
+	   font-weight: 600;
+	 }
+
+	 footer {
+	   width: 100%;
+	   text-align: center;
+	   margin-top: 50px;
+	   color: #1C303A;
+	 }
+
+	 footer p {
+	   font-size: 12px;
+	   color: #1C303A;
+	 }
+
+	 .footer-links {
+	   color: #1C303A;
+	   font-size: 12px;
+	   font-weight: 700;
+	   border-right: 3px solid #1C303A;
+	   padding-right: 10px;
+	   padding-left: 10px;
+	   padding-top: 5px;
+	   padding-bottom: 5px;
+	   text-align: center;
+	 }
+
+	 .footer-links-last {
+	   border-right: none !important;
+	 }
+
+	 .center-container {
+	   max-width: 550px;
+	   margin: 0 auto;
+	   color: #1C303A;
+	 }
+
+   .red {
+       color: #DC2626;
+     }
+
+	</style>
+  </head>
+  <body>
+  <section>
+    <h1 class="red" style="text-align: center;">Readable</h1>
+  </section>
+  <section>
+    <p>
+      Welcome to <strong>Readable</strong>! With <strong>Readable</strong> you 
+      can give a second life to all the great books on your shelf
+      just yearning for a new reader to pick them up.
+      
+    </p>
+    <p>
+      The first step on your <strong>Readable</strong> journey is to verify your account by clicking on this <a href="<%= @url %>">link</a>
+    </p>
+    <p>
+      Then, to share books in <strong>Readable</strong> you have to join a club, or create one and
+      invite others to your club. Once you are in a club with some friends, you can add your favorite books
+      to your library, and make them available in the club(s) of your choice. 
+    </p>
+    <p>
+      Happy reading,
+   </p>
+   <p>The Readable team</p>
+
+  </section>
+
+  </body>
+</html>
