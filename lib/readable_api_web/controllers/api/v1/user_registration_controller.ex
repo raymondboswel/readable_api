@@ -2,10 +2,6 @@ defmodule ReadableApiWeb.API.V1.UserRegistrationController do
   use ReadableApiWeb, :controller
 
   alias ReadableApi.Accounts
-  alias ReadableApi.Accounts.User
-  alias ReadableApiWeb.UserAuth
-  alias ReadableApi.Email
-  alias ReadableApi.Mailer
 
   require Logger
 

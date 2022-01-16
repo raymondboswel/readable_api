@@ -1,6 +1,7 @@
 defmodule ReadableApi.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias ReadableApi.Library.Book
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -10,6 +11,7 @@ defmodule ReadableApi.Accounts.User do
     field :confirmed_at, :naive_datetime
     has_many(:club_users, ReadableApi.Clubs.ClubUser)
     has_many(:clubs,  through: [:club_users, :club])
+    has_many(:books, Book, foreign_key: :owner_id)
     timestamps()
   end
 

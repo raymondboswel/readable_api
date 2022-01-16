@@ -7,13 +7,14 @@ defmodule ReadableApiWeb.API.V1.BookController do
   action_fallback ReadableApiWeb.FallbackController
 
   def index(conn, _params) do
-    books = Library.list_books()
-    IO.inspect("Got books")
+    user = conn.assigns.current_user
+    books = Library.list_books(user)
     render(conn, "index.json", books: books)
   end
 
   def create(conn, %{"book" => book_params}) do
-    with {:ok, %Book{} = book} <- Library.create_book(book_params) do
+    user = conn.assigns.current_user
+    with {:ok, %Book{} = book} <- Library.create_book(book_params, user) do
       conn
       |> put_status(:created)
       |> render("show.json", book: book)

@@ -17,8 +17,11 @@ defmodule ReadableApi.Library do
       [%Book{}, ...]
 
   """
-  def list_books do
-    Repo.all(Book)
+  def list_books(user) do
+    query = from b in Book,
+          where: b.owner_id == ^user.id
+
+    Repo.all(query)
   end
 
   @doc """
@@ -49,9 +52,9 @@ defmodule ReadableApi.Library do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_book(attrs \\ %{}) do
+  def create_book(attrs \\ %{}, user) do
     %Book{}
-    |> Book.changeset(attrs)
+    |> Book.changeset(Map.put(attrs, "owner_id", user.id))
     |> Repo.insert()
   end
 
