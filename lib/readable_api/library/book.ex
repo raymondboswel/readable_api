@@ -10,6 +10,8 @@ defmodule ReadableApi.Library.Book do
     # Has one owner
     # Has one borrower, available if borrower -> nil
     # Many to Many -> clubs
+    has_many(:club_books, ReadableApi.Clubs.ClubBook)
+    has_many(:clubs,  through: [:club_books, :club])
 
     timestamps()
   end
@@ -17,7 +19,7 @@ defmodule ReadableApi.Library.Book do
   @doc false
   def changeset(book, attrs) do
     book
-    |> cast(attrs, [:title, :image_url, :owner_id])
-    |> validate_required([:title, :image_url])
+    |> cast(attrs, [:title, :owner_id])
+    |> validate_required([:title])
   end
 end

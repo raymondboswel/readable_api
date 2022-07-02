@@ -28,9 +28,6 @@ COPY config config
 RUN mix deps.get --only prod && \
     mix deps.compile
 
-# install npm dependencies
-COPY assets/package.json assets/package-lock.json ./assets/
-RUN npm --prefix ./assets ci --progress=false --no-audit --loglevel=error
 
 COPY priv priv
 COPY assets assets
@@ -41,7 +38,7 @@ COPY assets assets
 # COPY lib lib
 
 # build assets
-RUN npm run --prefix ./assets deploy
+# RUN npm run --prefix ./assets deploy
 RUN mix phx.digest
 
 # copy source here if not using TailwindCSS
@@ -55,21 +52,22 @@ RUN mix do compile, release
 ### Second Stage - Setup the Runtime Environment
 ###
 
-# prepare release docker image
-FROM alpine:3.13.3 AS app
-RUN apk add --no-cache libstdc++ openssl ncurses-libs
+# prepare release docker image // TODO: Probably required for fly.io, put back at some point
+# FROM alpine:3.13.3 AS app
+# RUN apk add --no-cache libstdc++ openssl ncurses-libs
 
-WORKDIR /app
+# WORKDIR /app
+# 
+# RUN chown nobody:nobody /app
+# 
+# USER nobody:nobody
+# 
+# COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/readable_api ./
 
-RUN chown nobody:nobody /app
+# ENV HOME=/app
+# ENV MIX_ENV=prod
+# ENV SECRET_KEY_BASE=nokey
+# ENV PORT=4000
 
-USER nobody:nobody
-
-COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/readable_api ./
-
-ENV HOME=/app
-ENV MIX_ENV=prod
-ENV SECRET_KEY_BASE=nokey
-ENV PORT=4000
-
-CMD ["bin/readable_api", "start"]
+# CMD ["bin/readable_api", "start"] // TODO: I think this is necessary for fly.io. Create an extra dockerfile?
+CMD mix ecto.setup && mix phx.server

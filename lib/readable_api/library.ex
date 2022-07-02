@@ -7,6 +7,7 @@ defmodule ReadableApi.Library do
   alias ReadableApi.Repo
 
   alias ReadableApi.Library.Book
+  alias ReadableApi.Clubs.ClubBook
 
   @doc """
   Returns the list of books.
@@ -56,6 +57,22 @@ defmodule ReadableApi.Library do
     %Book{}
     |> Book.changeset(Map.put(attrs, "owner_id", user.id))
     |> Repo.insert()
+  end
+
+  def assign_book_to_club(club_id, book_id, _user) do
+    # Should not allow same book to be added to club twice
+    #
+
+    club_book = %ClubBook{club_id: club_id, book_id: book_id}
+
+    Repo.insert(club_book)
+
+    # book = Repo.get!(Book, book_id)
+    # post = Ecto.Changeset.change post, title: "New title"
+    # case MyRepo.update post do
+    #   {:ok, struct}       -> # Updated with success
+    #   {:error, changeset} -> # Something went wrong
+    # end
   end
 
   @doc """

@@ -21,6 +21,14 @@ defmodule ReadableApiWeb.API.V1.BookController do
     end
   end
 
+  def add_book_to_club(conn, %{"id" => club_id, "book" => %{"book_id" => book_id}}) do
+    user = conn.assigns.current_user
+    with :ok <- Library.assign_book_to_club(club_id, book_id, user) do
+      conn
+      |> put_status(:created)
+    end
+  end
+
   def show(conn, %{"id" => id}) do
     book = Library.get_book!(id)
     render(conn, "show.json", book: book)

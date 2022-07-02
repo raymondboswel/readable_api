@@ -7,6 +7,9 @@ defmodule ReadableApi.Clubs.Club do
     field :deactivated, :boolean
     has_many(:club_users, ReadableApi.Clubs.ClubUser)
     has_many(:users,  through: [:club_users, :user])
+
+    has_many(:club_books, ReadableApi.Clubs.ClubBook)
+    has_many(:books, through: [:club_books, :book])
     timestamps()
   end
 
