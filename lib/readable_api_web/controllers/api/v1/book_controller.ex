@@ -14,6 +14,7 @@ defmodule ReadableApiWeb.API.V1.BookController do
 
   def create(conn, %{"book" => book_params}) do
     user = conn.assigns.current_user
+
     with {:ok, %Book{} = book} <- Library.create_book(book_params, user) do
       conn
       |> put_status(:created)
@@ -23,9 +24,24 @@ defmodule ReadableApiWeb.API.V1.BookController do
 
   def add_book_to_club(conn, %{"id" => club_id, "book" => %{"book_id" => book_id}}) do
     user = conn.assigns.current_user
-    with :ok <- Library.assign_book_to_club(club_id, book_id, user) do
+
+    with {:ok, _struct} <- Library.assign_book_to_club(club_id, book_id, user) do
       conn
       |> put_status(:created)
+    end
+  end
+
+  #  def add_book_to_clubs(conn, %{"book_id" => book_id, "clubs" => clubs}) do
+  #    user = conn.assigns.current_user
+  #
+  #  end
+
+  def make_available(conn, %{"book_id" => book_id, "clubs" => clubs}) do
+    user = conn.assigns.current_user
+    with {:ok, _} <- Library.assign_book_to_clubs(book_id, clubs, user) do
+      conn
+      |> put_status(:ok)
+      send_resp(conn, :ok, "")
     end
   end
 

@@ -14,8 +14,16 @@ defmodule ReadableApiWeb.API.V1.ClubController do
     render(conn, "index.json", clubs: clubs)
   end
 
-  def club_books(conn, _params) do
-    books = Library.list_books()
+  def club_books(conn, %{"id" => club_id}) do
+    user = conn.assigns.current_user
+    books = Library.list_books(user, club_id)
+    IO.inspect("Got books")
+    render(conn, "books.json", books: books)
+  end
+
+  def my_club_books(conn, %{"id" => club_id}) do
+    user = conn.assigns.current_user
+    books = Library.list_user_club_books(user, club_id)
     IO.inspect("Got books")
     render(conn, "books.json", books: books)
   end

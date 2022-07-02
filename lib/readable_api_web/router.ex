@@ -40,7 +40,9 @@ defmodule ReadableApiWeb.Router do
     resources "/books", BookController, except: [:new, :edit]
     resources "/clubs", ClubController, except: [:new, :edit]
     get "/clubs/:id/books", ClubController, :club_books
-    post "/clubs/:id/books", ClubController, :add_book_to_club
+    get "/clubs/:id/my-books", ClubController, :my_club_books
+    post "/clubs/:club_id/books", BookController, :add_book_to_club
+    post "/books/:book_id/make_available", BookController, :make_available
   end
 
   scope "/", ReadableApiWeb do
